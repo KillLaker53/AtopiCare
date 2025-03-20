@@ -8,7 +8,7 @@ import { MongooseModule } from '@nestjs/mongoose';
     MongooseModule.forRoot(
       `mongodb://${process.env.mongo_user}:${process.env.mongo_password}@${process.env.mongo_host}:27017`,
       {
-        dbName: 'AtopiCare',
+        dbName: 'atopicare',
         directConnection: true,
       },
     ),

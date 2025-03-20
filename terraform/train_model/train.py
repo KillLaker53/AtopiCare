@@ -58,9 +58,9 @@ base_model = ResNet50V2(weights="imagenet", include_top=False)
 #personalized layers
 x = base_model.output
 x = GlobalAveragePooling2D()(x)
-x = Dense(256, activation="relu")(x) 
-x = Dropout(0.4)(x) 
-predictions = Dense(5, activation="softmax")(x)
+x = Dense(256, activation="relu")(x)
+x = Dropout(0.4)(x)
+predictions = Dense(6, activation="softmax")(x)
 
 
 model = Model(inputs=base_model.input, outputs=predictions)
@@ -98,4 +98,4 @@ history_finetune = model.fit(
 )
 
 test_loss, test_acc = model.evaluate(test_generator)
-print(f"🎯 Test Accuracy: {test_acc * 100:.2f}%")
+print(f"Test Accuracy: {test_acc * 100:.2f}%")

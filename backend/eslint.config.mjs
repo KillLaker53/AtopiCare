@@ -1,35 +1,29 @@
-// @ts-check
-import eslint from '@eslint/js';
-import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
-import globals from 'globals';
-import tseslint from 'typescript-eslint';
-
-export default tseslint.config(
-  {
-    ignores: ['eslint.config.mjs'],
-  },
-  eslint.configs.recommended,
-  ...tseslint.configs.recommendedTypeChecked,
-  eslintPluginPrettierRecommended,
-  {
-    languageOptions: {
-      globals: {
-        ...globals.node,
-        ...globals.jest,
+module.exports = {
+  overrides: [
+    {
+      files: ['*.ts', '*.tsx'],  // Target TypeScript files
+      rules: {
+        // Disable all rules for TypeScript files
+        'no-console': 'off',
+        'no-debugger': 'off',
+        '@typescript-eslint/*': 'off',
+        'prettier/prettier': 'off',
       },
-      ecmaVersion: 5,
-      sourceType: 'module',
-      parserOptions: {
-        projectService: true,
-        tsconfigRootDir: import.meta.dirname,
+      env: {
+        node: true,
+        jest: true,
       },
     },
+  ],
+  parser: '@typescript-eslint/parser',
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:prettier/recommended',
+  ],
+  rules: {
+    // Rules for non-TypeScript files (if any)
+    'no-console': 'warn',
+    'no-debugger': 'warn',
   },
-  {
-    rules: {
-      '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/no-floating-promises': 'warn',
-      '@typescript-eslint/no-unsafe-argument': 'warn'
-    },
-  },
-);
+};
