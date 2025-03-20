@@ -1,0 +1,25 @@
+version: '2.9'
+
+services:
+
+  mongodb:
+    image: mongo
+    ports:
+      - '27017:27017'
+    env_file:
+      - mongodb.env
+    volumes:
+      - mongodb_volume:/data/db
+  
+  db:
+    image: postgres
+    ports:
+      - '5432:5432'
+    env_file:
+      - postgresql.env
+    volumes:
+      - postgresql_volume:/var/lib/postgresql/data 
+
+volumes:
+  mongodb_volume:
+  postgresql_volume:
