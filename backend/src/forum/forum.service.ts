@@ -18,10 +18,14 @@ export class ForumService {
     const threads: IThread[] = await this.threadModel.find();
 
     const threadCards = threads.map(async (thread: IThread) => {
+      console.log(thread.user_id);
+
       const user: User | null = await this.userRepository.findOne({
         where: { id: thread.user_id },
         select: { username: true },
       });
+
+      console.log(user);
 
       if (user == null) {
         return null;

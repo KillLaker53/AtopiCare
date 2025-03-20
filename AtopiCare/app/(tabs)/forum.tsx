@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, FlatList, TouchableOpacity, Modal, ScrollView } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, FlatList, TouchableOpacity, Modal, ScrollView, Image } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 
 type Thread = {
   id: number;
@@ -16,6 +17,7 @@ const Forum: React.FC = () => {
   const [newThreadContent, setNewThreadContent] = useState('');
   const [selectedThread, setSelectedThread] = useState<Thread | null>(null);
   const [replyContent, setReplyContent] = useState('');
+  const [images, setImages] = useState<string[]>([]);
 
   const handlePostThread = () => {
     const newThread: Thread = {
@@ -29,100 +31,59 @@ const Forum: React.FC = () => {
     setThreads([...threads, newThread]);
     setNewThreadTitle('');
     setNewThreadContent('');
+    setImages([]);
   };
 
-  const handlePostReply = () => {
-    const updatedThreads = threads.map(thread => {
-      if (thread.id === selectedThread?.id) {
-        return {
-          ...thread,
-          replies: [...thread.replies, { content: replyContent, user: 'User1', date: new Date().toLocaleString() }],
-        };
-      }
-      return thread;
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsMultipleSelection: true,
+      quality: 1,
     });
-    setThreads(updatedThreads);
-    setReplyContent('');
+
+    if (!result.canceled) {
+      setImages([...images, result.assets[0].uri]);
+    }
   };
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={threads}
-        keyExtractor={item => item.id.toString()}
-        ListHeaderComponent={
-          <View style={styles.newThreadContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="Thread Title"
-              value={newThreadTitle}
-              onChangeText={setNewThreadTitle}
-            />
-            <TextInput
-              style={[styles.input, styles.textArea]}
-              placeholder="Thread Content"
-              value={newThreadContent}
-              onChangeText={setNewThreadContent}
-              multiline={true}
-              numberOfLines={4}
-            />
-            <TouchableOpacity style={styles.button} onPress={handlePostThread}>
-              <Text style={styles.buttonText}>Post</Text>
-            </TouchableOpacity>
-          </View>
-        }
-        renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => setSelectedThread(item)}>
-            <View style={styles.threadItem}>
-              <Text style={styles.threadTitle}>{item.title}</Text>
-              <Text style={styles.threadInfo}>{item.user} - {item.date}</Text>
-            </View>
-          </TouchableOpacity>
-        )}
-      />
-
-      {selectedThread && (
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={!!selectedThread}
-          onRequestClose={() => setSelectedThread(null)}
-        >
-          <View style={styles.modalView}>
-            <TouchableOpacity style={styles.closeButtonTopRight} onPress={() => setSelectedThread(null)}>
-              <Text style={styles.closeButtonText}>X</Text>
-            </TouchableOpacity>
-            <Text style={styles.modalTitle}>{selectedThread.title}</Text>
-            <Text style={styles.modalContent}>{selectedThread.content}</Text>
-            <Text style={styles.modalInfo}>{selectedThread.user} - {selectedThread.date}</Text>
-            <FlatList
-              data={selectedThread.replies}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({ item }) => (
-                <View style={styles.replyItem}>
-                  <Text>{item.content}</Text>
-                  <Text style={styles.replyInfo}>{item.user} - {item.date}</Text>
-                </View>
-              )}
-            />
-            <TextInput
-              style={[styles.input, styles.textArea]}
-              placeholder="Write a reply..."
-              value={replyContent}
-              onChangeText={setReplyContent}
-              multiline={true}
-              numberOfLines={2}
-            />
-            <TouchableOpacity style={styles.button} onPress={handlePostReply}>
-              <Text style={styles.buttonText}>Post Reply</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={[styles.button, styles.closeButton]} onPress={() => setSelectedThread(null)}>
-              <Text style={styles.buttonText}>Close</Text>
-            </TouchableOpacity>
-          </View>
-        </Modal>
-      )}
-    </View>
+      <View style={styles.container}>
+        <TextInput
+            style={styles.input}
+            placeholder="Thread Title"
+            value={newThreadTitle}
+            onChangeText={setNewThreadTitle}
+        />
+        <TextInput
+            style={[styles.input, styles.textArea]}
+            placeholder="Thread Content"
+            value={newThreadContent}
+            onChangeText={setNewThreadContent}
+            multiline={true}
+            numberOfLines={4}
+        />
+        <TouchableOpacity style={styles.imagePicker} onPress={pickImage}>
+          <Text style={styles.imagePickerText}>+</Text>
+        </TouchableOpacity>
+        <View style={styles.imageContainer}>
+          {images.map((image, index) => (
+              <Image key={index} source={{ uri: image }} style={styles.imagePreview} />
+          ))}
+        </View>
+        <Button title="Post Thread" onPress={handlePostThread} />
+        <FlatList
+            data={threads}
+            keyExtractor={item => item.id.toString()}
+            renderItem={({ item }) => (
+                <TouchableOpacity onPress={() => setSelectedThread(item)}>
+                  <View style={styles.threadItem}>
+                    <Text style={styles.threadTitle}>{item.title}</Text>
+                    <Text style={styles.threadInfo}>{item.user} - {item.date}</Text>
+                  </View>
+                </TouchableOpacity>
+            )}
+        />
+      </View>
   );
 };
 
@@ -130,7 +91,7 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     padding: 20,
-    paddingTop: 40, 
+    paddingTop: 40,
   },
   newThreadContainer: {
     marginBottom: 20,
@@ -150,43 +111,80 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderRadius: 5,
   },
-  textArea: {
-    height: 100, 
-    textAlignVertical: 'top', 
+  textAreaContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
-  
+  imageContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginBottom: 10,
+  },
+  textArea: {
+    flex: 1,
+    textAlignVertical: 'top',
+  },
+  imagePicker: {
+    marginLeft: 10,
+    backgroundColor: '#ddd',
+    padding: 10,
+    borderRadius: 5,
+  },
+  imagePickerText: {
+    fontSize: 20,
+    color: '#555',
+  },
+  imagePreview: {
+    width: 100,
+    height: 100,
+    marginTop: 10,
+    borderRadius: 5,
+  },
+  button: {
+    backgroundColor: '#007BFF',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+  },
   threadItem: {
     padding: 15,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    marginBottom: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 5,
   },
   threadTitle: {
     fontSize: 18,
     fontWeight: 'bold',
   },
   threadInfo: {
-    fontSize: 14,
-    color: 'gray',
+    fontSize: 12,
+    color: '#555',
+  },
+  threadImage: {
+    width: 100,
+    height: 100,
+    marginTop: 10,
+    borderRadius: 5,
   },
   modalView: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#fff',
     padding: 20,
-    margin: 20,
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
+    marginTop: 50,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  },
+  closeButtonTopRight: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+  },
+  closeButtonText: {
+    fontSize: 18,
+    color: '#007BFF',
   },
   modalTitle: {
     fontSize: 24,
@@ -198,9 +196,15 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   modalInfo: {
-    fontSize: 14,
-    color: 'gray',
-    marginBottom: 20,
+    fontSize: 12,
+    color: '#555',
+    marginBottom: 10,
+  },
+  modalImage: {
+    width: 200,
+    height: 200,
+    marginBottom: 10,
+    borderRadius: 5,
   },
   replyItem: {
     padding: 10,
@@ -209,31 +213,10 @@ const styles = StyleSheet.create({
   },
   replyInfo: {
     fontSize: 12,
-    color: 'gray',
-  },
-  button: {
-    backgroundColor: '#007BFF',
-    padding: 10,
-    borderRadius: 5,
-    alignItems: 'center',
-    marginVertical: 5,
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 16,
+    color: '#555',
   },
   closeButton: {
-    backgroundColor: '#6c757d',
-  },
-  closeButtonTopRight: {
-    position: 'absolute',
-    top: 10,
-    right: 10,
-    zIndex: 1,
-  },
-  closeButtonText: {
-    fontSize: 18,
-    color: 'red',
+    marginTop: 10,
   },
 });
 
