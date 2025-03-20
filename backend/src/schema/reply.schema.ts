@@ -10,9 +10,6 @@ export class Reply {
 
   @Prop({ type: String })
   date: string;
-
-  @Prop({ type: [Reply] })
-  replies: Reply[];
 }
 
 export const ReplySchema = SchemaFactory.createForClass(Reply);
