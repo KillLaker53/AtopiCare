@@ -1,15 +1,18 @@
 import React from 'react';
-import { View } from 'react-native';
+import { Platform, View, useColorScheme } from 'react-native';
 import AuthScreen from './AuthScreen';
+import { Tabs } from 'expo-router';
+import { HapticTab } from '@/components/HapticTab';
+import { IconSymbol } from '@/components/ui/IconSymbol';
+import TabBarBackground from '@/components/ui/TabBarBackground';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 export default function TabLayout() {
-<<<<<<< HEAD
-    return (
-        <View style={{ flex: 1 }}>
-            <AuthScreen />
-        </View>
-    );
-=======
+  //   return (
+  //       <View style={{ flex: 1 }}>
+  //           <AuthScreen />
+  //       </View>
+  // );
   const colorScheme = useColorScheme();
 
   return (
@@ -35,19 +38,19 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="forum"
         options={{
           title: 'Explore',
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
         }}
       />
-      <Tabs.Screen
+      {/* <Tabs.Screen
         name="profile"
         options={{
           title: 'Profile',
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="person.fill" color={color} />,
         }}
-      />
+      /> */}
       <Tabs.Screen
         name="UploadPhoto"
         options={{
@@ -57,5 +60,4 @@ export default function TabLayout() {
       />
     </Tabs>
   );
->>>>>>> 37085ad6ef92ba12a408651378daf95062e7bb6a
 }
