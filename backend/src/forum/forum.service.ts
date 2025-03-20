@@ -22,7 +22,7 @@ export class ForumService {
         where: { id: thread.user_id },
         select: { username: true },
       });
-      
+
       if (user == null) {
         return null;
       }
