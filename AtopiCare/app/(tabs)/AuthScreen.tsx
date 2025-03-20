@@ -35,10 +35,17 @@ export default function AuthScreen() {
 
 
     return (
-        <View style={[styles.loginContainer, isRegistering ? styles.registerContainer : styles.loginContainer]}>
-            <Text style={styles.appTitle}>ATOPICARE</Text>
+        <View style={[styles.loginContainer, styles.registerContainer, { backgroundColor: isDarkTheme ? "#222" : "white" }]}>
+        <Text style={styles.appTitle}>ATOPICARE</Text>
+            <TouchableOpacity onPress={toggleTheme}>
+                <Ionicons
+                    style={styles.iconTheme}
+                    name={isDarkTheme ? "contrast" : "contrast-outline"}
+                    size={width * 0.2}
+                    color={isDarkTheme ? "white" : "black"}
+                />
+            </TouchableOpacity>
             <Ionicons style={styles.icon} name="person-circle-outline" size={width * 0.25} color="black" />
-
             {isRegistering && (
                 <>
                     <TextInput
@@ -100,12 +107,6 @@ export default function AuthScreen() {
                 onPress={() => setIsRegistering((prevState) => !prevState)}
             >
                 <Text style={styles.buttonTextNotCurrent}>{isRegistering ? 'Sign In' : 'Sign Up'}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={styles.toggleThemeButton}
-                onPress={toggleTheme}
-            >
-                <Text style={styles.toggleThemeText}>{isDarkTheme ? 'Switch to Light Theme' : 'Switch to Dark Theme'}</Text>
             </TouchableOpacity>
         </View>
     );
@@ -204,14 +205,14 @@ const styles = StyleSheet.create({
     },
     icon: {
         fontSize: width * 0.25,
-        marginBottom: height * 0.05,
-        marginTop: height * 0.13,
+        marginBottom: height * 0.03,
+        marginTop: height * 0.01,
         color: "#007AFF"
     },
-    toggleThemeButton: {
-
+    iconTheme: {
+        fontSize: width * 0.07,
+        color: "black",
+        marginTop: height * 0.11,
+        marginLeft: width * 0.9,
     },
-    toggleThemeText: {
-
-    }
 });
