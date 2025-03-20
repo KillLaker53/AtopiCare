@@ -1,9 +1,17 @@
 data "aws_caller_identity" "current" {}
 
+<<<<<<< HEAD
+# 🎯 S3 Bucket for SageMaker Training Data
+=======
+>>>>>>> dcc418dbe7d0e116c8df53d4177c1786160860cc
 resource "aws_s3_bucket" "sagemaker_data_bucket" {
   bucket = "skin-analysis-dataset-bucket"
 }
 
+<<<<<<< HEAD
+# 🎯 IAM Role for SageMaker
+=======
+>>>>>>> dcc418dbe7d0e116c8df53d4177c1786160860cc
 resource "aws_iam_role" "sagemaker_role" {
   name = "SageMakerExecutionRole"
 
@@ -19,11 +27,19 @@ resource "aws_iam_role" "sagemaker_role" {
   })
 }
 
+<<<<<<< HEAD
+# 📌 Attach Permissions for SageMaker
+=======
+>>>>>>> dcc418dbe7d0e116c8df53d4177c1786160860cc
 resource "aws_iam_role_policy_attachment" "sagemaker_full_access" {
   role       = aws_iam_role.sagemaker_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSageMakerFullAccess"
 }
 
+<<<<<<< HEAD
+# 🎯 SageMaker Training Job
+=======
+>>>>>>> dcc418dbe7d0e116c8df53d4177c1786160860cc
 resource "aws_sagemaker_training_job" "skin_analysis_training" {
   training_job_name = "skin-analysis-training-job"
 

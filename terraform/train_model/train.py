@@ -60,7 +60,11 @@ x = base_model.output
 x = GlobalAveragePooling2D()(x)
 x = Dense(256, activation="relu")(x) 
 x = Dropout(0.4)(x) 
+<<<<<<< HEAD
+predictions = Dense(5, activation="softmax")(x)
+=======
 predictions = Dense(6, activation="softmax")(x)
+>>>>>>> dcc418dbe7d0e116c8df53d4177c1786160860cc
 
 
 model = Model(inputs=base_model.input, outputs=predictions)
@@ -98,4 +102,8 @@ history_finetune = model.fit(
 )
 
 test_loss, test_acc = model.evaluate(test_generator)
+<<<<<<< HEAD
+print(f"🎯 Test Accuracy: {test_acc * 100:.2f}%")
+=======
 print(f"Test Accuracy: {test_acc * 100:.2f}%")
+>>>>>>> dcc418dbe7d0e116c8df53d4177c1786160860cc
