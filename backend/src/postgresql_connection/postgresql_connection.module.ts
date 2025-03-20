@@ -14,6 +14,7 @@ import { User } from '../entity/user.entity';
       database: `atopicare`,
       entities: [User, Analysis],
       synchronize: true,
+      logging: true,
     }),
   ],
 })

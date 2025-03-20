@@ -2,7 +2,7 @@ import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Reply } from './reply.schema';
 
 @Schema({ _id: false })
-export class Thread{
+export class Thread {
   @Prop({ type: Number })
   user_id: number;
 

@@ -12,6 +12,6 @@ export class Analysis {
   @Column({ type: 'text' })
   tip: string;
 
-  @ManyToOne(type => User, user => user.analyses)
+  @ManyToOne((type) => User, (user) => user.analyses)
   user: User;
 }
