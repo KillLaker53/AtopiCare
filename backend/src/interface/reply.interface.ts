@@ -1,6 +1,5 @@
 export interface IReply extends Document {
   user_id: number;
-  message: string;
+  content: string;
   date: string;
-  replies: IReply[];
 }
