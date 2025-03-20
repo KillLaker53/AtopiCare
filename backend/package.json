@@ -27,22 +27,15 @@
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.1",
     "@nestjs/core": "^11.0.1",
-<<<<<<< HEAD
-=======
     "@nestjs/jwt": "^11.0.0",
->>>>>>> dcc418dbe7d0e116c8df53d4177c1786160860cc
     "@nestjs/mongoose": "^11.0.2",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/typeorm": "^11.0.0",
     "nestjs": "^0.0.1",
     "pg": "^8.14.1",
     "reflect-metadata": "^0.2.2",
-<<<<<<< HEAD
-    "rxjs": "^7.8.1"
-=======
     "rxjs": "^7.8.1",
     "typeorm": "^0.3.21"
->>>>>>> dcc418dbe7d0e116c8df53d4177c1786160860cc
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
