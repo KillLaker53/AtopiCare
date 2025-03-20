@@ -7,10 +7,10 @@ import { User } from 'src/entity/user.entity';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: `${"10.2.10.157"}`,
+      host: `${process.env.postgres_host}`,
       port: 5432,
-      username: `${"adminadminadmin"}`,
-      password: `${"passpasspass123"}`,
+      username: `${process.env.postgres_user}`,
+      password: `${process.env.postgres_password}`,
       database: `atopicare`,
       entities: [User, Analysis],
       synchronize: true,

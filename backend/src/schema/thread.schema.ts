@@ -12,6 +12,9 @@ export class Thread {
   @Prop({ type: Date })
   date: string;
 
+  @Prop({ type: String })
+  content: string;
+
   @Prop({ type: [Reply] })
   replies: Reply[];
 }
