@@ -7,10 +7,10 @@ export class User {
   id: number;
 
   @Column({ type: 'text' })
-  first_name: string;
+  firstName: string;
 
   @Column({ type: 'text' })
-  last_name: string;
+  lastName: string;
 
   @Column({ type: 'text' })
   username: string;
