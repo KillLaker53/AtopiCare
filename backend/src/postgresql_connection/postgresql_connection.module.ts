@@ -1,17 +1,20 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Analysis } from 'src/entity/analysis.entity';
+import { User } from 'src/entity/user.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: `${process.env.postgres_host}`,
+      host: `${"10.2.10.157"}`,
       port: 5432,
-      username: `${process.env.postgres_user}`,
-      password: `${process.env.postgres_password}`,
-      database: `AtopiCare`,
-      entities: [],
+      username: `${"adminadminadmin"}`,
+      password: `${"passpasspass123"}`,
+      database: `atopicare`,
+      entities: [User, Analysis],
       synchronize: true,
+      logging: true,
     }),
   ],
 })
