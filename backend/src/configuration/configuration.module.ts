@@ -5,11 +5,7 @@ import { ConfigModule } from '@nestjs/config';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: `./env/mongodb.env`,
-    }),
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: `./env/postgresql.env`,
+      envFilePath: [`./env/mongodb.env`, `./env/postgresql.env`],
     }),
   ],
 })

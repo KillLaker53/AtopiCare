@@ -1,12 +1,12 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 
-@Schema({ _id: false })
+@Schema()
 export class Reply {
   @Prop({ type: Number })
   user_id: number;
 
   @Prop({ type: String })
-  message: string;
+  content: string;
 
   @Prop({ type: String })
   date: string;
