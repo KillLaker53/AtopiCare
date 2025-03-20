@@ -33,7 +33,7 @@ export class ForumService {
     return threadCards;
   }
 
-  // async getThreadById(threadId) {
-  //   const thread = await
-  // }
+  async getThreadById(threadId) {
+    return this.threadModel.findById(threadId);
+  }
 }
