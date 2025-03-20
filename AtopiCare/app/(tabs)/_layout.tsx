@@ -1,12 +1,14 @@
 import React from 'react';
 import { View } from 'react-native';
 import AuthScreen from './AuthScreen';
+import UploadPhotoScreen from "@/app/(tabs)/UploadPhotoScreen";
 
 export default function TabLayout() {
 // <<<<<<< HEAD
     return (
         <View style={{ flex: 1 }}>
             <AuthScreen />
+            {/*<UploadPhotoScreen />*/}
         </View>
     );
 // =======
