@@ -1,8 +1,11 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
+import {View, Text, TouchableOpacity, Image, StyleSheet, Dimensions} from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
+import Navbar from "@/components/ui/Navbar";
+
+const { width, height } = Dimensions.get("window");
 
 export default function UploadPhotoScreen() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -34,6 +37,7 @@ export default function UploadPhotoScreen() {
 
   return (
     <LinearGradient colors={["#0f0c29", "#302b63", "#24243e"]} style={styles.container}>
+      <Navbar uvIndex={5} />
       <Text style={styles.title}>Upload Your Photo</Text>
 
       {selectedImage ? (
@@ -78,6 +82,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#fff",
     marginBottom: 20,
+    marginTop: height * 0.05
   },
   image: {
     width: 200,
