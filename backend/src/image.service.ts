@@ -4,8 +4,8 @@ import * as AWS from "aws-sdk";
 
 @Injectable()
 export class ImageService {
-  private readonly endpointName = "Flask-Sagemaker-Endpoint"; // ✅ Change to your actual SageMaker endpoint
-  private readonly region = "eu-central-1"; // ✅ Change to your AWS region
+  private readonly endpointName = "Flask-Sagemaker-Endpoint"; 
+  private readonly region = "eu-central-1"; 
 
   constructor() {
     AWS.config.update({ region: this.region });
@@ -16,7 +16,7 @@ export class ImageService {
       const sagemakerRuntime = new AWS.SageMakerRuntime();
       const imageBytes = fs.readFileSync(imagePath); // Read image as bytes
 
-      console.log(`📤 Sending image ${imagePath} to SageMaker...`);
+      console.log(`Sending image ${imagePath} to SageMaker...`);
 
       const params = {
         EndpointName: this.endpointName,
@@ -25,12 +25,12 @@ export class ImageService {
       };
 
       const response = await sagemakerRuntime.invokeEndpoint(params).promise();
-      const result = JSON.parse(response.Body.toString("utf-8")); // 🔄 Parse response
+      const result = JSON.parse(response.Body.toString("utf-8"));
 
-      console.log("📥 SageMaker Response:", result);
+      console.log("SageMaker Response:", result);
       return result; // Return classification result
     } catch (error) {
-      console.error("❌ Error sending image to SageMaker:", error);
+      console.error("Error sending image to SageMaker:", error);
       throw new InternalServerErrorException("SageMaker invocation failed");
     }
   }
