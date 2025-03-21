@@ -13,10 +13,10 @@ type user = {
 }
 
 const initialUsers: user[] = [
-    { id: "1", name: "John Doe", role: "User" },
-    { id: "2", name: "Jane Smith", role: "Admin" },
-    { id: "3", name: "Michael Brown", role: "User" },
-    { id: "4", name: "Sarah Johnson", role: "User" },
+    { id: "1", name: "Person 1", role: "User" },
+    { id: "2", name: "Person 2", role: "Admin" },
+    { id: "3", name: "Person 3", role: "User" },
+    { id: "4", name: "Person 4", role: "User" },
 ];
 
 export default function AdminScreen() {

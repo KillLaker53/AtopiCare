@@ -11,6 +11,7 @@ import FoodAndStressScreen from "@/app/(tabs)/FoodAndStressScreen";
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import forum from './forum';
+import LeafletMap from './UVHeatmap';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,6 +25,7 @@ export default function TabLayout() {
                 <Stack.Screen name="profile" component={ProfileScreen} />
                 <Stack.Screen name="FoodAndStressScreen" component={FoodAndStressScreen} />
                 <Stack.Screen name="forum" component={forum} />
+                <Stack.Screen name="UVHeatmap" component={LeafletMap} />
             </Stack.Navigator>
         // <View style={{flex: 1}}>
         //     {/*<AuthScreen/>*/}
