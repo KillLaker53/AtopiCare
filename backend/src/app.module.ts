@@ -6,10 +6,9 @@ import { AuthenticationModule } from './authentication/authentication.module';
 import { UsersModule } from './users/users.module';
 import { PostgresqlConnectionModule } from './postgresql_connection/postgresql_connection.module';
 import { MongodbConnectionModule } from './mongodb_connection/mongodb_connection.module';
-// import { ImageModule } from './image.module';
+import { ImageModule } from './image.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { UvApiModule } from './uv_api/uv_api.module';
-import { FoodAdvisorModule } from './food-advisor/food_advisor.module';
 
 @Module({
   imports: [
@@ -18,12 +17,12 @@ import { FoodAdvisorModule } from './food-advisor/food_advisor.module';
     PostgresqlConnectionModule,
     MongodbConnectionModule,
     ForumModule,
-    // ImageModule,
-    // MulterModule.register({
-    //   dest: './uploads',
-    // }),
-    UvApiModule,
-    FoodAdvisorModule,  // Add FoodAdvisorModule here
+    ImageModule,
+    MulterModule.register({
+       dest: './uploads',
+    }),
+    UvApiModule, 
+    
   ],
   controllers: [AppController],
   providers: [AppService],
