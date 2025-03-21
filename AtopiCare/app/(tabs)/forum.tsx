@@ -261,7 +261,7 @@ export default function forum () {
             }
 
             const decodedToken = JSON.stringify(jwtDecode(userAccessToken));
-
+            console.log(decodedToken);
             const ownerUsername = JSON.parse(decodedToken).username
 
             setOwnerUsername(ownerUsername);

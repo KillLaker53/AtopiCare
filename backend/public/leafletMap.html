@@ -22,27 +22,38 @@
     <div id="map"></div>
 
     <script>
-        // Initialize the map
-        var map = L.map('map').setView([40.7128, -74.006], 5); // Default to NYC
 
-        // Add OpenStreetMap tiles
+        var map = L.map('map').setView([42.698334, 23.319941], 13);
+
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
-        // Create heatmap layer
+
         var heatLayer = L.heatLayer([], { radius: 25 }).addTo(map);
 
-        // Function to update heatmap from React Native
+
         function updateHeatmap(data) {
             var heatPoints = data.map(d => [d.lat, d.lon, d.uvIndex]);
             heatLayer.setLatLngs(heatPoints);
         }
 
-        // Listen for messages from React Native
+        function addHeatmapPoints(data) {
+            data.forEach(point => {
+                L.circleMarker([point.lat, point.lon], {
+                    radius: 8,
+                    fillColor: "purple",
+                    color: "red",
+                    weight: 1,
+                    opacity: 1,
+                    fillOpacity: 0.8
+                }).bindPopup(`UV Index: ${point.uvIndex}`).addTo(map);
+            });
+        }
+
         document.addEventListener("message", function (event) {
             var data = JSON.parse(event.data);
-            updateHeatmap(data);
+            addHeatmapPoints(heatmapData)
         });
     </script>
 </body>
