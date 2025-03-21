@@ -42,7 +42,7 @@ export default function AuthScreen() {
         }
 
         try {
-            const response = await axios.post('http://10.0.2.2:3000/authentication/register', {
+            const response = await axios.post('http://localhost:3000/authentication/register', {
                 email,
                 password,
                 firstName,
@@ -68,12 +68,14 @@ export default function AuthScreen() {
         }
 
         try {
-            const response = await axios.post('http://10.0.2.2:3000/authentication/login', {
+            const response = await axios.post('http://localhost:3000/authentication/login', {
                 username,
                 password
             });
 
-            Alert.alert("Success", "You have successfully logged in!");
+            await AsyncStorage.setItem("accessToken", response.data.accessToken);
+
+            // Alert.alert("Success", "You have successfully logged in!");
             navigation.navigate("UploadPhotoScreen");
         } catch (error: any) {
             Alert.alert("Error", error.response?.data?.message || "Login failed");

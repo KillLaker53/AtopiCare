@@ -250,13 +250,10 @@ export default function forum () {
     const [images, setImages] = useState<string[]>([]);
     const [ownerUsername, setOwnerUsername] = useState();
 
-    const getOwnerUsername = async () => {
-
-    }
-
     useEffect(() => {
         const userAccessToken = AsyncStorage.getItem('accessToken').then(userAccessToken => {
-            if(userAccessToken == null) {
+            
+            if (userAccessToken == null) {
                 return null;
             }
 
@@ -267,7 +264,7 @@ export default function forum () {
             setOwnerUsername(ownerUsername);
         });
 
-        axios.get('http://10.0.2.2:3000/forum/threads').then(
+        axios.get('http://localhost:3000/forum/threads').then(
             response => {
                 setThreads(response.data);
             }
@@ -275,8 +272,6 @@ export default function forum () {
     }, []);
 
     const handlePostThread = async () => {
-
-
         const newThread = {
                     title: newThreadTitle,
                     content: newThreadContent,
@@ -285,7 +280,7 @@ export default function forum () {
 
         //await uploadImageToS3(images[0]);
 
-        axios.post("http://10.0.2.2:3000/forum/threads/add", newThread).then((response) => {
+        axios.post("http://localhost:3000/forum/threads/add", newThread).then((response) => {
             const returnedThread: Thread = {
                 id: response.data.id,
                 title: response.data.title,
@@ -307,9 +302,8 @@ export default function forum () {
                 content: replyContent,
                 ownerUsername: ownerUsername,
             };
-            console.log(newReply);
 
-            axios.post("http://10.0.2.2:3000/forum/threads/reply/add", newReply).then(response => {
+            axios.post("http://localhost:3000/forum/threads/reply/add", newReply).then(response => {
                 const updatedThreads = threads.map(thread => {
                     console.log(response.data);
                     if (thread.id === selectedThread.id) {
@@ -399,7 +393,7 @@ export default function forum () {
                     visible={!!selectedThread}
                     onRequestClose={() => setSelectedThread(null)}
                     onShow={() => {
-                axios.get(`http://10.0.2.2:3000/forum/threads/${selectedThread.id}`).then(
+                axios.get(`http://localhost:3000/forum/threads/${selectedThread.id}`).then(
                             response => setSelectedThread(response.data)
                         )
                     }}

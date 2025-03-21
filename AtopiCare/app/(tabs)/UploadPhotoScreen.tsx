@@ -70,7 +70,7 @@ export default function UploadPhotoScreen() {
 
       console.log("Sending Image to Backend:", formData);
 
-      const response = await fetch("http://10.0.2.2:3000/image/upload", {
+      const response = await fetch("http://localhost:3000/image/upload", {
         method: "POST",
         body: formData,
         headers: {
