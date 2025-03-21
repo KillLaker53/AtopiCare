@@ -23,7 +23,7 @@ export class AuthenticationController {
   
   @Post("/register")
   registerUser(@Req() request: Request) {
-    const input = { username: request.body.username, password: request.body.username, firstName: request.body.firstName, lastName: request.body.lastName, email: request.body.email }
+    const input = { username: request.body.username, password: request.body.password, firstName: request.body.firstName, lastName: request.body.lastName, email: request.body.email }
     return this.authenticationService.register(input);
   }
 
