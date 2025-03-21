@@ -57,7 +57,7 @@ export class ForumService {
 
     const selectedThread = new ThreadSelectedDto(thread, user.username)
 
-    selectedThread.replies = await Promise.all(thread.replies.map(async (reply) => {
+    selectedThread.replies = await Promise.all((thread.replies).map(async (reply) => {
       const user: User | null = await this.userRepository.findOne({
         where: { id: thread.userId },
         select: { username: true },
@@ -116,7 +116,10 @@ export class ForumService {
 
     //const newReply: ReplySaveDto = new ReplySaveDto(reply.content, replyUser.id);
 
-    const newReply = new (thread.replies as any).constructor(reply);
+    const newReply = new (thread.replies as any).constructor({
+        content: reply.content,
+        ownerUsername: reply.ownerUsername,
+    });
 
     thread.replies.push(newReply);
 

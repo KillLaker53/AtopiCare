@@ -269,17 +269,27 @@ const Forum: React.FC = () => {
     }
 
     const handlePostReply = () => {
-        const updatedThreads = threads.map(thread => {
-            if (thread.id === selectedThread?.id) {
-                return {
-                    ...thread,
-                    replies: [...thread.replies, { content: replyContent, ownerUsername: 'User1', date: new Date().toLocaleString() }],
-                };
-            }
-            return thread;
-        });
-        setThreads(updatedThreads);
-        setReplyContent('');
+        if (selectedThread) {
+            const newReply = {
+                threadId: selectedThread.id,
+                content: replyContent,
+                ownerUsername: 'TEST',
+            };
+
+            axios.post("http://localhost:3000/forum/threads/reply/add", newReply).then(response => {
+                const updatedThreads = threads.map(thread => {
+                    if (thread.id === selectedThread.id) {
+                        return {
+                            ...thread,
+                            replies: [...(thread.replies ?? []), response.data],
+                        };
+                    }
+                    return thread;
+                });
+                setThreads(updatedThreads);
+                setReplyContent('');
+            });
+        }
     };
 
     const pickImage = async () => {
@@ -426,6 +436,7 @@ const styles = StyleSheet.create({
     },
     imagePickerText: {
         fontSize: 20,
+        textAlign: 'center',
         color: '#555',
     },
     imagePreview: {
