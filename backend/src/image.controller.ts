@@ -1,6 +1,8 @@
 import {
   Controller,
   Post,
+  Get,
+  Param,
   UseInterceptors,
   UploadedFile,
   BadRequestException,
@@ -16,7 +18,7 @@ import { AnalysisService } from "./analysis/analysis.service";
 export class ImageController {
   constructor(
     private readonly imageService: ImageService,
-    private readonly analysisService: AnalysisService 
+    private readonly analysisService: AnalysisService
   ) {}
 
   @Post("upload")
@@ -31,17 +33,24 @@ export class ImageController {
       }),
     })
   )
-  async uploadImage(@UploadedFile() file: Express.Multer.File, @Body() body: { userId: number }) {
+  async uploadImage(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() body: { userId: number }
+  ) {
     if (!file) {
       throw new BadRequestException("No file uploaded");
     }
-    body.userId = 1; 
+    body.userId = 1;
 
     console.log("Received file:", file.filename);
 
-    const result = await this.imageService.classifyImage(`uploads/${file.filename}`);
+    const result = await this.imageService.classifyImage(
+      `uploads/${file.filename}`
+    );
 
-    const classificationDescriptions: { [key: string]: { name: string; tip: string } } = {
+    const classificationDescriptions: {
+      [key: string]: { name: string; tip: string };
+    } = {
       "1": {
         name: "Little Inflamed Skin",
         tip: "Use fragrance-free moisturizer and avoid harsh soaps.",
@@ -68,18 +77,19 @@ export class ImageController {
       },
     };
 
-    const classificationData = classificationDescriptions[result.classification] || {
-      name: "Unknown",
-      tip: "Consult a doctor for an accurate diagnosis.",
-    };
+    const classificationData =
+      classificationDescriptions[result.classification] || {
+        name: "Unknown",
+        tip: "Consult a doctor for an accurate diagnosis.",
+      };
 
     const imageUrl = `/uploads/${file.filename}`;
 
     const newAnalysis = await this.analysisService.createAnalysis({
       userId: body.userId,
-      classification: classificationData.name, 
-      tip: classificationData.tip, 
-      imageUrl, 
+      classification: classificationData.name,
+      tip: classificationData.tip,
+      imageUrl,
     });
 
     return {
@@ -88,4 +98,21 @@ export class ImageController {
       analysis: newAnalysis,
     };
   }
-}
+
+  @Get("last")
+  async getLastAnalysis() {
+    const lastAnalysis = await this.analysisService.getLastAnalysis();
+
+    if (!lastAnalysis) {
+      throw new BadRequestException("No analysis found");
+    }
+
+    const { id, classification, tip, createdAt } = lastAnalysis;
+    return { id, classification, tip, createdAt };
+  }
+
+  @Get("user/:userId")
+  async getAllByUser(@Param("userId") userId: number) {
+    return await this.analysisService.getAllByUser(userId);
+  }
+} 
