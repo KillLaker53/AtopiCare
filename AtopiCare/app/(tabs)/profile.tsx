@@ -31,17 +31,17 @@ export default function ProfileScreen() {
 
             <View style={styles.infoRow}>
               <Ionicons name="person-outline" size={22} color="white" />
-              <Text style={styles.infoText}>John Doe</Text>
+              <Text style={styles.infoText}>Person 1</Text>
             </View>
 
             <View style={styles.infoRow}>
               <Ionicons name="at-outline" size={22} color="white" />
-              <Text style={styles.infoText}>johndoe</Text>
+              <Text style={styles.infoText}>person1</Text>
             </View>
 
             <View style={styles.infoRow}>
               <Ionicons name="mail-outline" size={22} color="white" />
-              <Text style={styles.infoText}>johndoe@email.com</Text>
+              <Text style={styles.infoText}>person1@email.com</Text>
             </View>
 
             <View style={styles.infoRow}>

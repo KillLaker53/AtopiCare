@@ -21,7 +21,7 @@ const getRiskLevel = (riskPercentage: number) => {
     }
 };
 
-export default function FoodResult({ food, stressLevel, riskPercentage }: FoodResultProps) {
+export default function FoodResult({ food, stressLevel, riskPercentage}: FoodResultProps) {
     const { level, description } = getRiskLevel(riskPercentage);
 
     return (
@@ -66,5 +66,20 @@ const styles = StyleSheet.create({
         color: "#ccc",
         fontSize: 14,
         fontStyle: "italic",
+    },
+    alternativesTitle: {
+        fontSize: 18,
+        color: "white",
+        marginTop: 20,
+        fontWeight: "bold",
+    },
+    alternativesContainer: {
+        marginTop: 10,
+        alignItems: "center",
+    },
+    alternativeText: {
+        color: "white",
+        fontSize: 16,
+        marginVertical: 5,
     },
 });
