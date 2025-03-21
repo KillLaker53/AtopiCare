@@ -14,14 +14,14 @@ export class FoodAdvisorService {
                     },
                     {
                         role: "user",
-                        content: `Analyze the following meal and stress level for potential triggers, provide a risk score from 0 to 100 for potential health impacts for atopic dermatitis based on this combination:\nMeal: ${meal}\nStress Level: ${stressLevel}.Give only one number as percantage.`
+                        content: `Analyze the following meal and stress level for potential triggers, provide a risk score from 0 to 100 for potential health impacts for atopic dermatitis based on this combination:\nMeal: ${meal}\nStress Level: ${stressLevel}.Give just one number as percentage.`
                     }
                 ],
                 max_tokens: 300,
                 temperature: 0.5
             }, {
                 headers: {
-                    'Authorization': `Bearer ${process.env.OPENAPI_KEY}`
+                    'Authorization': `Bearer API-KEY`
                 }
             });
 

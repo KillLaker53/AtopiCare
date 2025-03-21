@@ -6,13 +6,13 @@ export class Food_advisorController {
     constructor(private readonly foodAdvisorService: FoodAdvisorService) {}
 
     @Post('/analyze')
-    async analyzeData(@Body() body: { meal: string, stressLevel: string }) {
+    async analyzeData(@Body() body: { meal: string; stressLevel: string }) {
         const { meal, stressLevel } = body;
         const analysis = await this.foodAdvisorService.getRealTimeSuggestions(meal, stressLevel);
 
         return {
             food: meal,
-            stressLevel: stressLevel,
+            stressLevel,
             riskPercentage: analysis.riskPercentage,
         };
     }

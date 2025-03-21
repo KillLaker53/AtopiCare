@@ -21,7 +21,7 @@ const getRiskLevel = (riskPercentage: number) => {
     }
 };
 
-export default function FoodResult({ food, stressLevel, riskPercentage}: FoodResultProps) {
+export default function FoodResult({ food, stressLevel, riskPercentage }: FoodResultProps) {
     const { level, description } = getRiskLevel(riskPercentage);
 
     return (
