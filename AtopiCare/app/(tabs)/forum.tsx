@@ -214,6 +214,9 @@ import React, {useEffect, useState} from 'react';
 import { View, Text, TextInput, Button, StyleSheet, FlatList, TouchableOpacity, Modal, ScrollView, Image } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {jwtDecode} from "jwt-decode";
+import * as FileSystem from 'expo-file-system';
 
 type Thread = {
     id: string;
@@ -224,6 +227,19 @@ type Thread = {
     replies: { content: string; ownerUsername: string; date: string }[];
 };
 
+// const uploadImageToS3 = async (imageUri: any) => {
+//     const base64 = await FileSystem.readAsStringAsync(imageUri, {
+//         encoding: FileSystem.EncodingType.Base64
+//     });
+//
+//     const formData = new FormData();
+//     formData.append('file', `data:image/jpeg;base64,${base64}`);
+//
+//     await axios.post('http://10.0.2.2:3000/upload', formData, {
+//         headers: {'Content-Type': 'multipart/form-data'}
+//     });
+// }
+
 export default function forum () {
     const [threads, setThreads] = useState<Thread[]>([]);
     const [newThreadTitle, setNewThreadTitle] = useState('');
@@ -232,40 +248,55 @@ export default function forum () {
     const [selectedThread, setSelectedThread] = useState<Thread | null>(null);
     const [replyContent, setReplyContent] = useState('');
     const [images, setImages] = useState<string[]>([]);
+    const [ownerUsername, setOwnerUsername] = useState();
+
+    const getOwnerUsername = async () => {
+
+    }
 
     useEffect(() => {
-        axios.get('http://localhost:3000/forum/threads').then(
+        const userAccessToken = AsyncStorage.getItem('accessToken').then(userAccessToken => {
+            if(userAccessToken == null) {
+                return null;
+            }
+
+            const decodedToken = JSON.stringify(jwtDecode(userAccessToken));
+
+            const ownerUsername = JSON.parse(decodedToken).username
+
+            setOwnerUsername(ownerUsername);
+        });
+
+        axios.get('http://10.0.2.2:3000/forum/threads').then(
             response => {
                 setThreads(response.data);
             }
         )
     }, []);
-    //
-    // const handlePostThread = () => {
-    //     const newThread: Thread = {
-    //         id: "smth",
-    //         title: newThreadTitle,
-    //         content: newThreadContent,
-    //         ownerUsername: 'User1',
-    //         date: new Date().toLocaleString(),
-    //         replies: [],
-    //     };
-    //     setThreads([...threads, newThread]);
-    //     setNewThreadTitle('');
-    //     setNewThreadContent('');
-    //     setImages([]);
-    // };
 
-    const handlePostThread = () => {
+    const handlePostThread = async () => {
+
+
         const newThread = {
                     title: newThreadTitle,
                     content: newThreadContent,
-                    ownerUsername: "stily1123",
+                    ownerUsername: ownerUsername,
                 };
 
-        axios.post("http://localhost:3000/forum/threads/add", newThread);
+        //await uploadImageToS3(images[0]);
 
-        setThreads(threads);
+        axios.post("http://10.0.2.2:3000/forum/threads/add", newThread).then((response) => {
+            const returnedThread: Thread = {
+                id: response.data.id,
+                title: response.data.title,
+                content: response.data.content,
+                ownerUsername: response.data.ownerUsername,
+                date: response.data.date,
+                replies: response.data.replies,
+            }
+
+            setThreads([...threads, returnedThread]);
+        });
     }
 
     const handlePostReply = () => {
@@ -274,20 +305,30 @@ export default function forum () {
             const newReply = {
                 threadId: selectedThread.id,
                 content: replyContent,
-                ownerUsername: 'stily1123',
+                ownerUsername: ownerUsername,
             };
             console.log(newReply);
 
-            axios.post("http://localhost:3000/forum/threads/reply/add", newReply).then(response => {
+            axios.post("http://10.0.2.2:3000/forum/threads/reply/add", newReply).then(response => {
                 const updatedThreads = threads.map(thread => {
-                    console.log(thread);    
+                    console.log(response.data);
                     if (thread.id === selectedThread.id) {
                         if (!thread.replies) {
+                            setSelectedThread({
+                                ...selectedThread,
+                                replies: [response.data]
+                            })
+
                             return {
                                 ...thread,
                                 replies: [response.data],
                             };
                         } else {
+                            setSelectedThread({
+                                ...selectedThread,
+                                replies: [...(thread.replies), response.data]
+                            })
+
                             return {
                                 ...thread,
                                 replies: [...(thread.replies), response.data],
@@ -297,7 +338,7 @@ export default function forum () {
                     return thread;
                 });
                 setThreads(updatedThreads);
-                setReplyContent('');
+
             });
         }
     };
@@ -358,7 +399,7 @@ export default function forum () {
                     visible={!!selectedThread}
                     onRequestClose={() => setSelectedThread(null)}
                     onShow={() => {
-                        axios.get(`http://localhost:3000/forum/threads/${selectedThread.id}`).then(
+                axios.get(`http://10.0.2.2:3000/forum/threads/${selectedThread.id}`).then(
                             response => setSelectedThread(response.data)
                         )
                     }}

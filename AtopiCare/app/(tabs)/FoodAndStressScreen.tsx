@@ -22,7 +22,7 @@ const { width, height } = Dimensions.get("window");
 type foodResult = {
     food: string,
     stressLevel:  "low" | "medium" | "high",
-    riskPercentage: number
+    riskPercentage: number,
 }
 
 export default function FoodAndStressScreen() {
@@ -44,7 +44,7 @@ export default function FoodAndStressScreen() {
         try {
             console.log(foodInput, selectedStressLevel);
             const response = await axios.post(
-                "http://localhost:3000/food-advisor/analyze",
+                "http://10.0.2.2:3000/food-advisor/analyze",
                 {
                     meal: foodInput,
                     stressLevel: selectedStressLevel,
@@ -58,7 +58,11 @@ export default function FoodAndStressScreen() {
 
             const data = response.data;
 
-            if (data.food && data.stressLevel && typeof data.riskPercentage === "number") {
+            if (
+                data.food &&
+                data.stressLevel &&
+                typeof data.riskPercentage === "number"
+            ) {
                 setResult({
                     food: data.food,
                     stressLevel: data.stressLevel,
@@ -68,7 +72,7 @@ export default function FoodAndStressScreen() {
                 setFoodInput("");
                 setSelectedStressLevel(null);
             } else {
-                throw new Error("Unexpected response from server");
+                throw new Error("Unexpected response structure from server.");
             }
         } catch (error: any) {
             Alert.alert("Error", "Failed to check food safety.");
@@ -78,13 +82,11 @@ export default function FoodAndStressScreen() {
         }
     };
 
+
     return (
         <LinearGradient colors={["#0f0c29", "#302b63", "#24243e"]} style={styles.container}>
-            <Navbar/>
-            <KeyboardAvoidingView
-                behavior={Platform.OS === "ios" ? "padding" : undefined}
-                style={{ flex: 1 }}
-            >
+            <Navbar />
+            <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} style={{ flex: 1 }}>
                 <ScrollView contentContainerStyle={styles.contentContainer}>
                     <Text style={styles.title}>TEST A FOOD</Text>
                     <TextInput

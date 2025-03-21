@@ -7,8 +7,6 @@ import {
   Body,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
-import { ImageService } from "./image.service";
-import { AnalysisService } from "./analysis.service"; 
 import { diskStorage } from "multer";
 import { extname } from "path";
 import { classificationDescriptions } from "./constants/classification-descriptions"; 
