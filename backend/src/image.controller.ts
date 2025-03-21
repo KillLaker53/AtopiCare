@@ -3,11 +3,11 @@
 // import { ImageService } from "./image.service";
 // import { diskStorage } from "multer";
 // import { extname } from "path";
-//
+
 // @Controller("image")
 // export class ImageController {
 //   constructor(private readonly imageService: ImageService) {}
-//
+
 //   @Post("upload")
 //   @UseInterceptors(
 //     FileInterceptor("file", {
@@ -24,9 +24,9 @@
 //     if (!file) {
 //       throw new BadRequestException("No file uploaded");
 //     }
-//
+
 //     console.log("Received file:", file.filename);
-//
+
 //     // Send image to SageMaker for classification
 //     const result = await this.imageService.classifyImage(file.path);
 //     return { filename: file.filename, classification: result };

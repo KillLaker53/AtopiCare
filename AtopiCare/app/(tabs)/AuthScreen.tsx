@@ -33,7 +33,7 @@ export default function AuthScreen() {
     const [username, setUsername] = useState("");
     const [isDarkTheme, setIsDarkTheme] = useState(true);
 
-        const navigation = useNavigation<AuthScreenNavigationProp>();
+    const navigation = useNavigation<AuthScreenNavigationProp>();
 
     const clearFields = async () => {
         setEmail("");
