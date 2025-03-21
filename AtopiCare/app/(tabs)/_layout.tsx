@@ -39,8 +39,8 @@ import ProfileScreen from "@/app/(tabs)/profile";
 export default function TabLayout() {
     return (
         <View style={{flex: 1}}>
-            {<AuthScreen/>}
-            {/*<UploadPhotoScreen />*/}
+            {/*<AuthScreen/>*/}
+            {<UploadPhotoScreen />}
             {/*<AnalyzeScreen />*/}
             {/* <AdminScreen /> */}
             {/*<ProfileScreen />*/}

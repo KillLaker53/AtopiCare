@@ -3,7 +3,7 @@ import json
 
 ENDPOINT_NAME = "Flask-Sagemaker-Endpoint"
 REGION = "eu-central-1"
-IMAGE_PATH = "test_jpg/4ta.jpg" 
+IMAGE_PATH = "test_jpg/3.jpg" 
 
 sagemaker_runtime = boto3.client("sagemaker-runtime", region_name=REGION)
 
