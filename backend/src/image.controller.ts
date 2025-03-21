@@ -11,10 +11,7 @@ import { ImageService } from "./image.service";
 import { AnalysisService } from "./analysis.service"; 
 import { diskStorage } from "multer";
 import { extname } from "path";
-import { ImageService } from "./image.service";
-import { AnalysisService } from "./analysis.service";
 import { classificationDescriptions } from "./constants/classification-descriptions"; 
-
 
 @Controller("image")
 export class ImageController {

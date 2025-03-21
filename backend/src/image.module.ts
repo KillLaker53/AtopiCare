@@ -6,7 +6,7 @@ import { AnalysisModule } from "./analysis.module";
 
 @Module({
   imports: [
-    AnalysisModule, // ✅ Import AnalysisModule
+    AnalysisModule,
     MulterModule.register({
       dest: "./uploads",
     }),
