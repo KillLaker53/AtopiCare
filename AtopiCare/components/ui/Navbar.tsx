@@ -17,6 +17,7 @@ type RootStackParamList = {
     forum: undefined;
     FoodAndStressScreen: undefined;
     AnalyzeScreen: undefined;
+    UVHeatmap: undefined;
 };
 
 type ScreenNavigationProp = StackNavigationProp<RootStackParamList, "AuthScreen">;
@@ -62,6 +63,7 @@ export default function Navbar() {
             <Ionicons style={styles.icon} name="camera" size={width * 0.1} color="white" onPress={() => navigation.navigate("UploadPhotoScreen")}/>
             <Ionicons style={styles.icon} name="chatbubbles" size={width * 0.1} color="white" onPress={() => navigation.navigate("forum")} />
             <Ionicons style={styles.icon} name="person-circle-outline" size={width * 0.1} color="white" onPress={() => navigation.navigate("profile")}/>
+            <Ionicons style={styles.icon} name="person" size={width * 0.1} color="white" onPress={() => navigation.navigate("UVHeatmap")}/>
             <Ionicons style={styles.icon} name="exit" size={width * 0.1} color="white" onPress={() => navigation.navigate("AuthScreen")}/>
         </View>
     );
