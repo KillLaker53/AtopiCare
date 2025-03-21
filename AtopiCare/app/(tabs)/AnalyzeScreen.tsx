@@ -15,10 +15,10 @@ export default function AnalyzeScreen() {
                 <View style={styles.imagePlaceholder}>
                     <Ionicons name="image-outline" size={80} color="white" />
                 </View>
-                <Text style={styles.statusText}>STATUS:</Text>
+                <Text style={styles.statusText}>STATUS: </Text>
                 <View style={styles.tipContainer}>
                     <Ionicons name="alert-circle" size={30} color="#FF9800" />
-                    <Text style={styles.tipText}>Tip:</Text>
+                    <Text style={styles.tipText}>Tip: </Text>
                 </View>
             </View>
         </LinearGradient>

@@ -235,7 +235,7 @@ type Thread = {
 //     const formData = new FormData();
 //     formData.append('file', `data:image/jpeg;base64,${base64}`);
 //
-//     await axios.post('http://10.0.2.2:3000/upload', formData, {
+//     await axios.post('http://localhost:3000/upload', formData, {
 //         headers: {'Content-Type': 'multipart/form-data'}
 //     });
 // }
@@ -260,6 +260,8 @@ export default function forum () {
             const decodedToken = JSON.stringify(jwtDecode(userAccessToken));
 
             const ownerUsername = JSON.parse(decodedToken).username
+
+            console.log(decodedToken, ownerUsername);
 
             setOwnerUsername(ownerUsername);
         });
