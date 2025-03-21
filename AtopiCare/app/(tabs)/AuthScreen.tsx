@@ -42,7 +42,7 @@ export default function AuthScreen() {
         }
 
         try {
-            const response = await axios.post('http://10.0.2.2:3000/authentication/register', {
+            const response = await axios.post('http://localhost:3000/authentication/register', {
                 email,
                 password,
                 firstName,
@@ -68,7 +68,7 @@ export default function AuthScreen() {
         }
 
         try {
-            const response = await axios.post('http://10.0.2.2:3000/authentication/login', {
+            const response = await axios.post('http://localhost:3000/authentication/login', {
                 username,
                 password
             });

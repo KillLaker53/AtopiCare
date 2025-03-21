@@ -41,7 +41,7 @@ export default function Navbar() {
     useEffect(() => {
         const fetchUvIndex = async () => {
             try {
-                const response = await axios.get("http://10.0.2.2:3000/uv-api/uv-index");
+                const response = await axios.get("http://localhost:3000/uv-api/uv-index");
                 setUvIndex(response.data.uvIndex);
             } catch (error) {
                 console.error("Error fetching UV index:", error);

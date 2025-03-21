@@ -21,7 +21,7 @@ export class FoodAdvisorService {
                 temperature: 0.5
             }, {
                 headers: {
-                    'Authorization': `Bearer API-KEY`
+                    'Authorization': `Bearer ${process.env.OPENAPI_KEY}`
                 }
             });
 

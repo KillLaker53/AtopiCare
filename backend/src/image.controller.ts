@@ -10,7 +10,7 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
 import { extname } from "path";
 import { ImageService } from "./image.service";
-import { AnalysisService } from "./analysis.service";
+import { AnalysisService } from "./analysis/analysis.service";
 import { classificationDescriptions } from "./constants/classification-descriptions"; 
 
 
@@ -38,16 +38,11 @@ export class ImageController {
       throw new BadRequestException("No file uploaded");
     }
     body.userId = 1; 
-    // if (!body.userId) {
-    //   throw new BadRequestException("Missing userId");
-    // }
 
     console.log("Received file:", file.filename);
 
-    // 🔍 Send image to SageMaker for classification
     const result = await this.imageService.classifyImage(`uploads/${file.filename}`);
 
-    // Classification Mapping
     const classificationDescriptions: { [key: string]: { name: string; tip: string } } = {
       "1": {
         name: "Little Inflamed Skin",
@@ -84,9 +79,9 @@ export class ImageController {
 
     const newAnalysis = await this.analysisService.createAnalysis({
       userId: body.userId,
-      classification: classificationData.name, // Classification Name
-      tip: classificationData.tip, // Detailed Tip
-      imageUrl, // Save image URL
+      classification: classificationData.name, 
+      tip: classificationData.tip, 
+      imageUrl, 
     });
 
     return {
