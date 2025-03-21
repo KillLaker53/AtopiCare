@@ -12,6 +12,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { LinearGradient } from "expo-linear-gradient";
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type RootStackParamList = {
     AuthScreen: undefined;
@@ -31,24 +33,51 @@ export default function AuthScreen() {
     const [username, setUsername] = useState("");
     const [isDarkTheme, setIsDarkTheme] = useState(true);
 
-    const navigation = useNavigation<AuthScreenNavigationProp>();
+        const navigation = useNavigation<AuthScreenNavigationProp>();
 
-    const handleRegister = () => {
+    const handleRegister = async () => {
         if (!email || !password || !firstName || !lastName || !username) {
             Alert.alert("Error", "Please fill in all fields.");
             return;
         }
-        Alert.alert("Success", "You have successfully registered!");
-        setIsRegistering(false);
+
+        try {
+            const response = await axios.post('http://localhost:3000/authentication/register', {
+                email,
+                password,
+                firstName,
+                lastName,
+                username
+            });
+
+            Alert.alert("Success", "You have successfully registered!");
+
+            await AsyncStorage.setItem("accessToken", response.data.accessToken);
+
+            setIsRegistering(false);
+
+        } catch (error: any) {
+            Alert.alert("Error", error.response?.data?.message || "Registration failed");
+        }
     };
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
         if (!username || !password) {
             Alert.alert("Error", "Please fill in both fields.");
             return;
         }
-        Alert.alert("Success", "You have successfully logged in!");
-        navigation.navigate("UploadPhotoScreen");
+
+        try {
+            const response = await axios.post('http://localhost:3000/authentication/login', {
+                username,
+                password
+            });
+
+            Alert.alert("Success", "You have successfully logged in!");
+            navigation.navigate("UploadPhotoScreen");
+        } catch (error: any) {
+            Alert.alert("Error", error.response?.data?.message || "Login failed");
+        }
     };
 
     const styles = StyleSheet.create({

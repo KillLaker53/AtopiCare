@@ -7,7 +7,7 @@ export class ThreadCardDto {
   date: string;
 
   constructor(thread: IThread, username: string) {
-    this.id = thread._id.toString();
+    this.id = thread._id;
     this.title = thread.title;
     this.date = thread.date;
     this.ownerUsername = username;

@@ -1,9 +1,12 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Types } from 'mongoose';
 
-@Schema()
+@Schema({_id: true})
 export class Reply {
+  @Prop({ type: Types.ObjectId, auto: true })
+  _id: Types.ObjectId;
   @Prop({ type: Number })
-  user_id: number;
+  userId: number;
 
   @Prop({ type: String })
   content: string;
