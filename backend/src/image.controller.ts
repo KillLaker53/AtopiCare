@@ -8,15 +8,19 @@ import {
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { ImageService } from "./image.service";
-import { AnalysisService } from "./analysis.service"; // ✅ Import Analysis Service
+import { AnalysisService } from "./analysis.service"; 
 import { diskStorage } from "multer";
 import { extname } from "path";
+import { ImageService } from "./image.service";
+import { AnalysisService } from "./analysis.service";
+import { classificationDescriptions } from "./constants/classification-descriptions"; 
+
 
 @Controller("image")
 export class ImageController {
   constructor(
     private readonly imageService: ImageService,
-    private readonly analysisService: AnalysisService // ✅ Inject Analysis Service
+    private readonly analysisService: AnalysisService 
   ) {}
 
   @Post("upload")
@@ -35,12 +39,12 @@ export class ImageController {
     if (!file) {
       throw new BadRequestException("No file uploaded");
     }
-    body.userId = 1; // 🔥 Hardcoded User ID for testing
+    body.userId = 1; 
     // if (!body.userId) {
     //   throw new BadRequestException("Missing userId");
     // }
 
-    console.log("📸 Received file:", file.filename);
+    console.log("Received file:", file.filename);
 
     // 🔍 Send image to SageMaker for classification
     const result = await this.imageService.classifyImage(`uploads/${file.filename}`);
@@ -78,10 +82,8 @@ export class ImageController {
       tip: "Consult a doctor for an accurate diagnosis.",
     };
 
-    // Image URL (saved in the uploads folder)
     const imageUrl = `/uploads/${file.filename}`;
 
-    // 📊 Save classification in PostgreSQL `analysis` table
     const newAnalysis = await this.analysisService.createAnalysis({
       userId: body.userId,
       classification: classificationData.name, // Classification Name

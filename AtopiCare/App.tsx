@@ -1,18 +1,12 @@
-import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import AuthScreen from "./app/(tabs)/AuthScreen";
-import UploadPhotoScreen from "./app/(tabs)/UploadPhotoScreen";
-
-const Stack = createStackNavigator();
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import TabLayout from './app/(tabs)/_layout';
+ 
 
 export default function App() {
-    return (
-        <NavigationContainer>
-            <Stack.Navigator screenOptions={{ headerShown: false }}>
-                <Stack.Screen name="AuthScreen" component={AuthScreen} />
-                <Stack.Screen name="UploadPhotoScreen" component={UploadPhotoScreen} />
-            </Stack.Navigator>
-        </NavigationContainer>
-    );
+  return (
+    <NavigationContainer>
+      <TabLayout />  {/* Your navigation stack goes here */}
+    </NavigationContainer>
+  );
 }
