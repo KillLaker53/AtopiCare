@@ -1,13 +1,5 @@
-data "aws_caller_identity" "current" {}
-
-# 🎯 S3 Bucket for SageMaker Training Data
-resource "aws_s3_bucket" "sagemaker_data_bucket" {
-  bucket = "skin-analysis-dataset-bucket"
-}
-
-# 🎯 IAM Role for SageMaker
 resource "aws_iam_role" "sagemaker_role" {
-  name = "SageMakerExecutionRole"
+  name = "SageMakerExecutionRoleNew"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -21,47 +13,56 @@ resource "aws_iam_role" "sagemaker_role" {
   })
 }
 
-# 📌 Attach Permissions for SageMaker
 resource "aws_iam_role_policy_attachment" "sagemaker_full_access" {
   role       = aws_iam_role.sagemaker_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSageMakerFullAccess"
 }
 
-# 🎯 SageMaker Training Job
-resource "aws_sagemaker_training_job" "skin_analysis_training" {
-  training_job_name = "skin-analysis-training-job"
+resource "aws_iam_role_policy_attachment" "sagemaker_cloudwatch_logging" {
+  role       = aws_iam_role.sagemaker_role.name
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
+}
 
-  algorithm_specification {
-    training_image = "123456789012.dkr.ecr.us-east-1.amazonaws.com/my-image" # Change this to your actual training image
-    training_input_mode = "File"
-  }
+resource "aws_sagemaker_model" "flask_model" {
+  name               = "Flask-Sagemaker-Model"
+  execution_role_arn = aws_iam_role.sagemaker_role.arn
 
-  role_arn = aws_iam_role.sagemaker_role.arn
+  primary_container {
+    image = "722377226063.dkr.ecr.eu-central-1.amazonaws.com/flask-sagemaker-model:latest"
+    mode  = "SingleModel"
 
-  input_data_config {
-    channel_name = "training"
-    data_source {
-      s3_data_source {
-        s3_uri                  = "s3://${aws_s3_bucket.sagemaker_data_bucket.id}/training-data"
-        s3_data_type            = "S3Prefix"
-        s3_data_distribution_type = "FullyReplicated"
-      }
+    environment = {
+      SAGEMAKER_CONTAINER_PORT = "8081"
     }
   }
+}
 
-  output_data_config {
-    s3_output_path = "s3://${aws_s3_bucket.sagemaker_data_bucket.id}/output"
+resource "aws_sagemaker_endpoint_configuration" "flask_endpoint_config" {
+  name = "Flask-Sagemaker-Endpoint-Config"
+
+  production_variants {
+    variant_name           = "PrimaryVariant"
+    model_name             = aws_sagemaker_model.flask_model.name
+    instance_type          = "ml.m5.large"
+    initial_instance_count = 1
   }
 
-  resource_config {
-    instance_type  = "ml.m5.large"
-    instance_count = 1
-    volume_size_in_gb = 10
-  }
+  data_capture_config {
+    enable_capture  = true
+    destination_s3_uri = "s3://your-sagemaker-logs-bucket/"
+    initial_sampling_percentage = 100
 
-  stopping_condition {
-    max_runtime_in_seconds = 3600
-  }
+    capture_options {
+      capture_mode = "Input"
+    }
 
-  depends_on = [aws_s3_bucket.sagemaker_data_bucket, aws_iam_role.sagemaker_role]
+    capture_options {
+      capture_mode = "Output"
+    }
+  }
+}
+
+resource "aws_sagemaker_endpoint" "flask_endpoint" {
+  name = "Flask-Sagemaker-Endpoint"
+  endpoint_config_name = aws_sagemaker_endpoint_configuration.flask_endpoint_config.name
 }

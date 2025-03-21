@@ -1,16 +1,14 @@
-import os
 import tarfile
-import tensorflow as tf
+import os
 
-model = tf.keras.models.load_model("best_resnet_model.h5")
+source_dir = "sagemaker_model"
+tar_path = "resnet_sagemaker_model_fixed.tar.gz"
 
-sagemaker_model_dir = "sagemaker_model"
-os.makedirs(sagemaker_model_dir, exist_ok=True)
+if os.path.exists(tar_path):
+    os.remove(tar_path)
 
-model.save(sagemaker_model_dir)
-
-tar_path = "resnet_sagemaker_model.tar.gz"
 with tarfile.open(tar_path, "w:gz") as tar:
-    tar.add(sagemaker_model_dir, arcname=os.path.basename(sagemaker_model_dir))
+    for item in os.listdir(source_dir):
+        tar.add(os.path.join(source_dir, item), arcname=item)
 
-print(f"✅ Model saved and archived as {tar_path} for SageMaker deployment!")
+print("Model repackaged successfully!")
