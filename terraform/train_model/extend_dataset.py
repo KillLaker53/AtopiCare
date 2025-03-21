@@ -22,7 +22,7 @@ for category in sorted(os.listdir(dataset_dir)):
     if not os.path.isdir(category_path):
         continue  
 
-    print(f"📂 Обработваме категория: {category}")
+    print(f"Maintain categories: {category}")
 
 
     for filename in os.listdir(category_path):
@@ -45,6 +45,6 @@ for category in sorted(os.listdir(dataset_dir)):
             if i >= 5:  
                 break
 
-    print(f"✅ Завършено за {category}!\n")
+    print(f"Completed for {category}!\n")
 
-print("🎉 Dataset-ът е разширен успешно! 🚀")
+print("Dataset succesfully expanded.")
