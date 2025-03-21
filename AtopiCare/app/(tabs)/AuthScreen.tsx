@@ -13,6 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { LinearGradient } from "expo-linear-gradient";
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type RootStackParamList = {
     AuthScreen: undefined;
@@ -50,7 +51,11 @@ export default function AuthScreen() {
             });
 
             Alert.alert("Success", "You have successfully registered!");
+
+            await AsyncStorage.setItem("accessToken", response.data.accessToken);
+
             setIsRegistering(false);
+
         } catch (error: any) {
             Alert.alert("Error", error.response?.data?.message || "Registration failed");
         }
