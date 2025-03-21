@@ -260,7 +260,7 @@ const Forum: React.FC = () => {
         const newThread = {
                     title: newThreadTitle,
                     content: newThreadContent,
-                    ownerUsername: "TEST",
+                    ownerUsername: "stily1123",
                 };
 
         axios.post("http://localhost:3000/forum/threads/add", newThread);
@@ -269,17 +269,37 @@ const Forum: React.FC = () => {
     }
 
     const handlePostReply = () => {
-        const updatedThreads = threads.map(thread => {
-            if (thread.id === selectedThread?.id) {
-                return {
-                    ...thread,
-                    replies: [...thread.replies, { content: replyContent, ownerUsername: 'User1', date: new Date().toLocaleString() }],
-                };
-            }
-            return thread;
-        });
-        setThreads(updatedThreads);
-        setReplyContent('');
+        console.log(selectedThread);
+        if (selectedThread) {
+            const newReply = {
+                threadId: selectedThread.id,
+                content: replyContent,
+                ownerUsername: 'stily1123',
+            };
+            console.log(newReply);
+
+            axios.post("http://localhost:3000/forum/threads/reply/add", newReply).then(response => {
+                const updatedThreads = threads.map(thread => {
+                    console.log(thread);    
+                    if (thread.id === selectedThread.id) {
+                        if (!thread.replies) {
+                            return {
+                                ...thread,
+                                replies: [response.data],
+                            };
+                        } else {
+                            return {
+                                ...thread,
+                                replies: [...(thread.replies), response.data],
+                            };
+                        }
+                    }
+                    return thread;
+                });
+                setThreads(updatedThreads);
+                setReplyContent('');
+            });
+        }
     };
 
     const pickImage = async () => {
@@ -426,6 +446,7 @@ const styles = StyleSheet.create({
     },
     imagePickerText: {
         fontSize: 20,
+        textAlign: 'center',
         color: '#555',
     },
     imagePreview: {
