@@ -80,8 +80,11 @@ export default function FoodAndStressScreen() {
 
     return (
         <LinearGradient colors={["#0f0c29", "#302b63", "#24243e"]} style={styles.container}>
-            <Navbar />
-            <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} style={{ flex: 1 }}>
+            <Navbar/>
+            <KeyboardAvoidingView
+                behavior={Platform.OS === "ios" ? "padding" : undefined}
+                style={{ flex: 1 }}
+            >
                 <ScrollView contentContainerStyle={styles.contentContainer}>
                     <Text style={styles.title}>TEST A FOOD</Text>
                     <TextInput

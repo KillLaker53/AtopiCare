@@ -35,16 +35,7 @@ export default function AuthScreen() {
 
     const navigation = useNavigation<AuthScreenNavigationProp>();
 
-    const clearFields = async () => {
-        setEmail("");
-        setPassword("");
-        setFirstName("");
-        setLastName("");
-        setUsername("");
-    }
-
     const handleRegister = async () => {
-        await clearFields();
         if (!email || !password || !firstName || !lastName || !username) {
             Alert.alert("Error", "Please fill in all fields.");
             return;
@@ -64,13 +55,13 @@ export default function AuthScreen() {
             await AsyncStorage.setItem("accessToken", response.data.accessToken);
 
             setIsRegistering(false);
+
         } catch (error: any) {
             Alert.alert("Error", error.response?.data?.message || "Registration failed");
         }
     };
 
     const handleLogin = async () => {
-        await clearFields();
         if (!username || !password) {
             Alert.alert("Error", "Please fill in both fields.");
             return;
@@ -87,11 +78,6 @@ export default function AuthScreen() {
         } catch (error: any) {
             Alert.alert("Error", error.response?.data?.message || "Login failed");
         }
-    };
-
-    const handleFormSwitch = () => {
-        clearFields();
-        setIsRegistering(!isRegistering);
     };
 
     const styles = StyleSheet.create({
@@ -186,7 +172,7 @@ export default function AuthScreen() {
                 <>
                     <TextInput
                         style={styles.input}
-                        placeholder="first name"
+                        placeholder="First Name"
                         placeholderTextColor={isDarkTheme ? "white" : "black"}
                         value={firstName}
                         onChangeText={setFirstName}
@@ -195,7 +181,7 @@ export default function AuthScreen() {
                     />
                     <TextInput
                         style={styles.input}
-                        placeholder="last name"
+                        placeholder="Last Name"
                         placeholderTextColor={isDarkTheme ? "white" : "black"}
                         value={lastName}
                         onChangeText={setLastName}
@@ -204,7 +190,7 @@ export default function AuthScreen() {
                     />
                     <TextInput
                         style={styles.input}
-                        placeholder="email"
+                        placeholder="Email"
                         placeholderTextColor={isDarkTheme ? "white" : "black"}
                         value={email}
                         onChangeText={setEmail}
@@ -216,7 +202,7 @@ export default function AuthScreen() {
 
             <TextInput
                 style={styles.input}
-                placeholder="username"
+                placeholder="Username"
                 placeholderTextColor={isDarkTheme ? "white" : "black"}
                 value={username}
                 onChangeText={setUsername}
@@ -226,7 +212,7 @@ export default function AuthScreen() {
 
             <TextInput
                 style={styles.input}
-                placeholder="password"
+                placeholder="Password"
                 placeholderTextColor={isDarkTheme ? "white" : "black"}
                 value={password}
                 onChangeText={setPassword}
@@ -244,7 +230,7 @@ export default function AuthScreen() {
 
             <TouchableOpacity
                 style={styles.buttonSecondary}
-                onPress={handleFormSwitch}
+                onPress={() => setIsRegistering(!isRegistering)}
             >
                 <Text style={styles.buttonTextSecondary}>
                     {isRegistering ? "Sign In" : "Sign Up"}

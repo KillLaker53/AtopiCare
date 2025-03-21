@@ -1,34 +1,100 @@
-// import { Controller, Post, UseInterceptors, UploadedFile, BadRequestException } from "@nestjs/common";
-// import { FileInterceptor } from "@nestjs/platform-express";
-// import { ImageService } from "./image.service";
-// import { diskStorage } from "multer";
-// import { extname } from "path";
+import {
+  Controller,
+  Post,
+  UseInterceptors,
+  UploadedFile,
+  BadRequestException,
+  Body,
+} from "@nestjs/common";
+import { FileInterceptor } from "@nestjs/platform-express";
+import { ImageService } from "./image.service";
+import { AnalysisService } from "./analysis.service"; 
+import { diskStorage } from "multer";
+import { extname } from "path";
+import { ImageService } from "./image.service";
+import { AnalysisService } from "./analysis.service";
+import { classificationDescriptions } from "./constants/classification-descriptions"; 
 
-// @Controller("image")
-// export class ImageController {
-//   constructor(private readonly imageService: ImageService) {}
 
-//   @Post("upload")
-//   @UseInterceptors(
-//     FileInterceptor("file", {
-//       storage: diskStorage({
-//         destination: "./uploads",
-//         filename: (req, file, callback) => {
-//           const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-//           callback(null, `${uniqueSuffix}${extname(file.originalname)}`);
-//         },
-//       }),
-//     })
-//   )
-//   async uploadImage(@UploadedFile() file: Express.Multer.File) {
-//     if (!file) {
-//       throw new BadRequestException("No file uploaded");
-//     }
+@Controller("image")
+export class ImageController {
+  constructor(
+    private readonly imageService: ImageService,
+    private readonly analysisService: AnalysisService 
+  ) {}
 
-//     console.log("Received file:", file.filename);
+  @Post("upload")
+  @UseInterceptors(
+    FileInterceptor("file", {
+      storage: diskStorage({
+        destination: "./uploads",
+        filename: (req, file, callback) => {
+          const timestamp = new Date().toISOString().replace(/[-T:.Z]/g, "");
+          callback(null, `${timestamp}${extname(file.originalname)}`);
+        },
+      }),
+    })
+  )
+  async uploadImage(@UploadedFile() file: Express.Multer.File, @Body() body: { userId: number }) {
+    if (!file) {
+      throw new BadRequestException("No file uploaded");
+    }
+    body.userId = 1; 
+    // if (!body.userId) {
+    //   throw new BadRequestException("Missing userId");
+    // }
 
-//     // Send image to SageMaker for classification
-//     const result = await this.imageService.classifyImage(file.path);
-//     return { filename: file.filename, classification: result };
-//   }
-// }
+    console.log("Received file:", file.filename);
+
+    // 🔍 Send image to SageMaker for classification
+    const result = await this.imageService.classifyImage(`uploads/${file.filename}`);
+
+    // Classification Mapping
+    const classificationDescriptions: { [key: string]: { name: string; tip: string } } = {
+      "1": {
+        name: "Little Inflamed Skin",
+        tip: "Use fragrance-free moisturizer and avoid harsh soaps.",
+      },
+      "2": {
+        name: "Moderate Inflamed Skin",
+        tip: "Apply hypoallergenic moisturizer and use cold compresses.",
+      },
+      "3": {
+        name: "Inflamed Skin with Little Infections",
+        tip: "Use antiseptic creams, avoid scratching, and keep skin dry.",
+      },
+      "4": {
+        name: "Very Inflamed Skin with Infections and Dryness",
+        tip: "Use medicated creams, deep hydrating balms, and seek medical advice.",
+      },
+      "5": {
+        name: "Very Dry Skin with Wounds and Bleeding",
+        tip: "Apply thick emollient creams, hydrate, and see a dermatologist.",
+      },
+      "6": {
+        name: "Healthy Skin",
+        tip: "Maintain a balanced skincare routine and avoid irritants.",
+      },
+    };
+
+    const classificationData = classificationDescriptions[result.classification] || {
+      name: "Unknown",
+      tip: "Consult a doctor for an accurate diagnosis.",
+    };
+
+    const imageUrl = `/uploads/${file.filename}`;
+
+    const newAnalysis = await this.analysisService.createAnalysis({
+      userId: body.userId,
+      classification: classificationData.name, // Classification Name
+      tip: classificationData.tip, // Detailed Tip
+      imageUrl, // Save image URL
+    });
+
+    return {
+      filename: file.filename,
+      classification: result,
+      analysis: newAnalysis,
+    };
+  }
+}

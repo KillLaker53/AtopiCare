@@ -13,11 +13,11 @@ export class Analysis {
   tip: string;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt: Date; 
 
   @Column({ type: 'text' })
-  imageUrl: string;
+  imageUrl: string; 
 
   @ManyToOne((type) => User, (user) => user.analyses)
   user: User;
-}
+} 

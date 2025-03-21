@@ -5,6 +5,8 @@ import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
 import { useNavigation } from "expo-router/build/useNavigation";
 import { StackNavigationProp } from "@react-navigation/stack";
+import FoodAndStressScreen from '../../app/(tabs)/FoodAndStressScreen';
+import AnalyzeScreen from '../../app/(tabs)/AnalyzeScreen';
 import UVBar from "./UVBar"; // Make sure path is correct
 
 const { width, height } = Dimensions.get("window");
@@ -31,6 +33,7 @@ export const getUVGradient = (uv: number): [string, string, string] => {
 
 export default function Navbar() {
     const [uvIndex, setUvIndex] = useState<number | null>(null);
+
     const [showUVInfo, setShowUVInfo] = useState(false);
     const navigation = useNavigation<ScreenNavigationProp>();
 
@@ -48,26 +51,22 @@ export default function Navbar() {
 
     return (
         <>
-            <View style={styles.navbarContainer}>
-                <Ionicons style={styles.icon} name="help-circle-outline" size={width * 0.1} color="white" onPress={() => navigation.navigate("FoodAndStressScreen")} />
+        <View style={styles.navbarContainer}>
 
-                {uvIndex !== null && (
-                    <TouchableOpacity onPress={() => setShowUVInfo(true)}>
-                        <View style={styles.uvContainer}>
-                            <View style={styles.uvIndicator}>
-                                <LinearGradient colors={getUVGradient(uvIndex)} style={StyleSheet.absoluteFill} />
-                            </View>
-                            <Text style={styles.uvText}>UV {uvIndex}</Text>
-                        </View>
-                    </TouchableOpacity>
-                )}
-
-                <Ionicons style={styles.icon} name="camera" size={width * 0.1} color="white" onPress={() => navigation.navigate("UploadPhotoScreen")} />
-                <Ionicons style={styles.icon} name="chatbubbles" size={width * 0.1} color="white" onPress={() => navigation.navigate("forum")} />
-                <Ionicons style={styles.icon} name="person-circle-outline" size={width * 0.1} color="white" onPress={() => navigation.navigate("profile")} />
-                <Ionicons style={styles.icon} name="exit" size={width * 0.1} color="white" onPress={() => navigation.navigate("AuthScreen")} />
-            </View>
-
+            <Ionicons style={styles.icon} name="help-circle-outline" size={width * 0.1} color="white" onPress={() => navigation.navigate("FoodAndStressScreen")}/>
+            {uvIndex !== null && (
+                <View style={styles.uvContainer}>
+                    <View style={styles.uvIndicator}>
+                        <LinearGradient colors={getUVGradient(uvIndex)} style={StyleSheet.absoluteFill} />
+                    </View>
+                    <Text style={styles.uvText}>UV {uvIndex}</Text>
+                </View>
+            )}
+            <Ionicons style={styles.icon} name="camera" size={width * 0.1} color="white" onPress={() => navigation.navigate("UploadPhotoScreen")}/>
+            <Ionicons style={styles.icon} name="chatbubbles" size={width * 0.1} color="white" onPress={() => navigation.navigate("forum")} />
+            <Ionicons style={styles.icon} name="person-circle-outline" size={width * 0.1} color="white" onPress={() => navigation.navigate("profile")}/>
+            <Ionicons style={styles.icon} name="exit" size={width * 0.1} color="white" onPress={() => navigation.navigate("AuthScreen")}/>
+        </View>
             {showUVInfo && uvIndex !== null && (
                 <UVBar uvIndex={uvIndex} onClose={() => setShowUVInfo(false)} />
             )}
