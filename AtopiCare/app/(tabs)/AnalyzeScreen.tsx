@@ -9,7 +9,7 @@ const { width, height } = Dimensions.get("window");
 export default function AnalyzeScreen() {
     return (
         <LinearGradient colors={["#141E30", "#243B55"]} style={styles.container}>
-            <Navbar uvIndex={5} />
+            <Navbar />
             <View style={styles.analysisContainer}>
                 <Text style={styles.date}>03-12-2006</Text>
                 <View style={styles.imagePlaceholder}>
