@@ -1,4 +1,4 @@
-enum Role {
-  reg,
-  admin,
+export enum Role {
+  reg = "reg",
+  admin = "admin",
 }

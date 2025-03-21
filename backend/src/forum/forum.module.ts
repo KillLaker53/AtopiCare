@@ -5,6 +5,8 @@ import { MongodbConnectionModule } from '../mongodb_connection/mongodb_connectio
 import { ThreadSchema } from '../schema/thread.schema';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PostgresqlConnectionModule } from '../postgresql_connection/postgresql_connection.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from '../entity/user.entity';
 
 @Module({
   imports: [
@@ -17,6 +19,7 @@ import { PostgresqlConnectionModule } from '../postgresql_connection/postgresql_
       },
     ]),
     PostgresqlConnectionModule,
+    TypeOrmModule.forFeature([User]),
   ],
   controllers: [ForumController],
   providers: [ForumService],

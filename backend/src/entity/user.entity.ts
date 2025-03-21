@@ -1,16 +1,16 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { Analysis } from './analysis.entity';
-
-@Entity()
+import { Role } from '../enum/role.enum';
+@Entity("users")
 export class User {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
 
   @Column({ type: 'text' })
-  first_name: string;
+  firstName: string;
 
   @Column({ type: 'text' })
-  last_name: string;
+  lastName: string;
 
   @Column({ type: 'text' })
   username: string;
@@ -24,6 +24,6 @@ export class User {
   @Column({ type: 'enum', enum: ['reg', 'admin'] })
   role: Role;
 
-  @OneToMany(type => Analysis, analysis => analysis.user)
+  @OneToMany((type) => Analysis, (analysis) => analysis.user)
   analyses: Analysis[];
 }

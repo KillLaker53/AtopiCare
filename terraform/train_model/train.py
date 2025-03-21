@@ -58,8 +58,8 @@ base_model = ResNet50V2(weights="imagenet", include_top=False)
 #personalized layers
 x = base_model.output
 x = GlobalAveragePooling2D()(x)
-x = Dense(256, activation="relu")(x) 
-x = Dropout(0.4)(x) 
+x = Dense(256, activation="relu")(x)
+x = Dropout(0.4)(x)
 predictions = Dense(6, activation="softmax")(x)
 
 
