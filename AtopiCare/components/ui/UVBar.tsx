@@ -1,7 +1,9 @@
+// UVBar.tsx
 import React from "react";
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
+import {getUVGradient} from "@/components/ui/Navbar";
 
 const { width, height } = Dimensions.get("window");
 
@@ -23,7 +25,7 @@ export default function UVBar({ uvIndex, onClose }: Props) {
 
     return (
         <View style={styles.container}>
-            <LinearGradient colors={["white", "white", "white"] } style={styles.gradient}>
+            <LinearGradient colors={getUVGradient(uvIndex)} style={styles.gradient}>
                 <View style={styles.content}>
                     <Text style={styles.title}>UV Index in Bulgaria</Text>
                     <Text style={styles.uvValue}>Current UV: {uvIndex} ({level})</Text>
@@ -45,7 +47,7 @@ const styles = StyleSheet.create({
         right: 20,
         borderRadius: 15,
         overflow: "hidden",
-        zIndex: 10,
+        zIndex: 30,
         elevation: 10,
     },
     gradient: {

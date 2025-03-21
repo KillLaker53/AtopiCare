@@ -235,7 +235,7 @@ export default function AuthScreen() {
 
             <TouchableOpacity
                 style={styles.buttonPrimary}
-                onPress={handleFormSwitch}
+                onPress={isRegistering ? handleRegister : handleLogin}
             >
                 <Text style={styles.buttonText}>
                     {isRegistering ? "Sign Up" : "Sign In"}
