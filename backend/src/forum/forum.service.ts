@@ -63,11 +63,14 @@ export class ForumService {
         select: { username: true },
       });
 
+      console.log(thread)
+
       if(user == null) {
         return null;
       }
 
-      return new ReplySelectedDto(reply, user.username);
+      const newper = new ReplySelectedDto(reply, user.username);
+      return newper;
     }));
 
     return selectedThread;
@@ -97,6 +100,8 @@ export class ForumService {
   async saveReply(reply: ReplyPostDto) {
     const thread = await this.threadModel.findById(reply.threadId)
 
+    console.log(thread);
+
     if(thread == null) {
       return null;
     }
@@ -114,15 +119,45 @@ export class ForumService {
       return null;
     }
 
-    //const newReply: ReplySaveDto = new ReplySaveDto(reply.content, replyUser.id);
+    // const newReply: ReplySaveDto = new ReplySaveDto(reply.content, replyUser.id);
+    // const newReply = new (thread.replies as any).constructor({
+    //   content: reply.content,
+    //   ownerUsername: reply.ownerUsername,
+    //   date: new Date().toLocaleString(),
+    // });
+    // console.log(newReply);
+    // console.log(reply);
 
-    const newReply = new (thread.replies as any).constructor({
-        content: reply.content,
-        ownerUsername: reply.ownerUsername,
-    });
+    // thread.replies.push(newReply);
+
+    // await thread.save();
+    const newReply = {
+      userId: replyUser.id,
+      content: reply.content,
+      ownerUsername: reply.ownerUsername,
+      date: new Date().toLocaleString(),
+    };
 
     thread.replies.push(newReply);
 
+    console.log(thread);
+
+    thread.markModified('replies');
+
     await thread.save();
+    // const updatedThread = await this.threadModel.findOneAndUpdate(
+    //   { _id: reply.threadId },  // Find the thread by its ID
+    //   {
+    //     $push: {
+    //       replies: {
+    //         userId: replyUser.id,
+    //         content: reply.content,
+    //         ownerUsername: reply.ownerUsername,
+    //         date: new Date().toLocaleString(),
+    //       }
+    //     }
+    //   },
+    //   { new: true }  // This returns the updated document
+    // );
   }
 }

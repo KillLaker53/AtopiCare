@@ -260,7 +260,7 @@ const Forum: React.FC = () => {
         const newThread = {
                     title: newThreadTitle,
                     content: newThreadContent,
-                    ownerUsername: "TEST",
+                    ownerUsername: "stily1123",
                 };
 
         axios.post("http://localhost:3000/forum/threads/add", newThread);
@@ -269,20 +269,30 @@ const Forum: React.FC = () => {
     }
 
     const handlePostReply = () => {
+        console.log(selectedThread);
         if (selectedThread) {
             const newReply = {
                 threadId: selectedThread.id,
                 content: replyContent,
-                ownerUsername: 'TEST',
+                ownerUsername: 'stily1123',
             };
+            console.log(newReply);
 
             axios.post("http://localhost:3000/forum/threads/reply/add", newReply).then(response => {
                 const updatedThreads = threads.map(thread => {
+                    console.log(thread);    
                     if (thread.id === selectedThread.id) {
-                        return {
-                            ...thread,
-                            replies: [...(thread.replies ?? []), response.data],
-                        };
+                        if (!thread.replies) {
+                            return {
+                                ...thread,
+                                replies: [response.data],
+                            };
+                        } else {
+                            return {
+                                ...thread,
+                                replies: [...(thread.replies), response.data],
+                            };
+                        }
                     }
                     return thread;
                 });
