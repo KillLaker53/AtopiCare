@@ -1,5 +1,5 @@
 export interface IReply extends Document {
-  user_id: number;
+  userId: number;
   content: string;
   date: string;
 }

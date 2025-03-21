@@ -1,7 +1,7 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Reply } from './reply.schema';
 
-@Schema({ _id: false })
+@Schema()
 export class Thread {
   @Prop({ type: Number })
   user_id: number;
@@ -9,7 +9,7 @@ export class Thread {
   @Prop({ type: String })
   title: string;
 
-  @Prop({ type: Date })
+  @Prop({ type: String })
   date: string;
 
   @Prop({ type: String })

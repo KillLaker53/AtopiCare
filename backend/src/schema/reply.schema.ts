@@ -3,7 +3,7 @@ import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 @Schema()
 export class Reply {
   @Prop({ type: Number })
-  user_id: number;
+  userId: number;
 
   @Prop({ type: String })
   content: string;
