@@ -22,6 +22,7 @@ export default function Navbar({ uvIndex = 5 }: { uvIndex: number }) {
                 <LinearGradient colors={getUVGradient(uvIndex)} style={styles.uvIndicator} />
                 <Text style={styles.uvText}>UV {uvIndex}</Text>
             </View>
+            <Ionicons style={styles.icon} name="camera" size={width * 0.1} color="white" />
             <Ionicons style={styles.icon} name="chatbubbles" size={width * 0.1} color="white" />
             <Ionicons style={styles.icon} name="person-circle-outline" size={width * 0.1} color="white" />
             <Ionicons style={styles.icon} name="exit" size={width * 0.1} color="white" />
@@ -44,15 +45,15 @@ const styles = StyleSheet.create({
         borderBottomColor: "rgba(255, 255, 255, 0.1)",
     },
     icon: {
-        fontSize: width * 0.1,
+        fontSize: width * 0.09,
     },
     uvContainer: {
         alignItems: "center",
         marginTop: height * 0.03
     },
     uvIndicator: {
-        width: width * 0.09,
-        height: width * 0.09,
+        width: width * 0.07,
+        height: width * 0.07,
         borderRadius: width * 0.06,
         borderWidth: 2,
         borderColor: "white",
