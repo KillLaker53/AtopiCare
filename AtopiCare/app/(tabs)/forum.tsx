@@ -224,7 +224,7 @@ type Thread = {
     replies: { content: string; ownerUsername: string; date: string }[];
 };
 
-const Forum: React.FC = () => {
+export default function forum () {
     const [threads, setThreads] = useState<Thread[]>([]);
     const [newThreadTitle, setNewThreadTitle] = useState('');
     const [newThreadContent, setNewThreadContent] = useState('');
@@ -399,7 +399,7 @@ const Forum: React.FC = () => {
             )}
         </View>
     );
-};
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -538,5 +538,3 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
 });
-
-export default Forum;
