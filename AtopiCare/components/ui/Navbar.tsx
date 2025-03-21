@@ -41,7 +41,7 @@ export default function Navbar() {
     useEffect(() => {
         const fetchUvIndex = async () => {
             try {
-                const response = await axios.get("http://localhost:3000/uv-api/uv-index");
+                const response = await axios.get("http://10.0.2.2:3000/uv-api/uv-index");
                 setUvIndex(response.data.uvIndex);
             } catch (error) {
                 console.error("Error fetching UV index:", error);
@@ -53,20 +53,18 @@ export default function Navbar() {
     return (
         <>
         <View style={styles.navbarContainer}>
-
+            <Ionicons style={styles.icon} name="person-circle-outline" size={width * 0.1} color="white" onPress={() => navigation.navigate("profile")}/>
             <Ionicons style={styles.icon} name="help-circle-outline" size={width * 0.1} color="white" onPress={() => navigation.navigate("FoodAndStressScreen")}/>
+            <Ionicons style={styles.icon} name="camera" size={width * 0.1} color="white" onPress={() => navigation.navigate("UploadPhotoScreen")}/>
             {uvIndex !== null && (
                 <View style={styles.uvContainer}>
-                    <View style={styles.uvIndicator}>
+                    <View style={styles.uvIndicator} onTouchEnd={() => navigation.navigate("UVHeatmap")} >
                         <LinearGradient colors={getUVGradient(uvIndex)} style={StyleSheet.absoluteFill} />
                     </View>
                     <Text style={styles.uvText}>UV {uvIndex}</Text>
                 </View>
             )}
-            <Ionicons style={styles.icon} name="camera" size={width * 0.1} color="white" onPress={() => navigation.navigate("UploadPhotoScreen")}/>
             <Ionicons style={styles.icon} name="chatbubbles" size={width * 0.1} color="white" onPress={() => navigation.navigate("forum")} />
-            <Ionicons style={styles.icon} name="person-circle-outline" size={width * 0.1} color="white" onPress={() => navigation.navigate("profile")}/>
-            <Ionicons style={styles.icon} name="person" size={width * 0.1} color="white" onPress={() => navigation.navigate("UVHeatmap")}/>
             <Ionicons style={styles.icon} name="exit" size={width * 0.1} color="white" onPress={() => navigation.navigate("AuthScreen")}/>
         </View>
             {showUVInfo && uvIndex !== null && (

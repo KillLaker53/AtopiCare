@@ -44,7 +44,7 @@ export default function FoodAndStressScreen() {
         try {
             console.log(foodInput, selectedStressLevel);
             const response = await axios.post(
-                "http://localhost:3000/food-advisor/analyze",
+                "http://10.0.2.2:3000/food-advisor/analyze",
                 {
                     meal: foodInput,
                     stressLevel: selectedStressLevel,
