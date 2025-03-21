@@ -21,7 +21,7 @@ export class FoodAdvisorService {
                 temperature: 0.5
             }, {
                 headers: {
-                    'Authorization': `Bearer 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`
+                    'Authorization': `Bearer ${process.env.OPENAPI_KEY}`
                 }
             });
 
