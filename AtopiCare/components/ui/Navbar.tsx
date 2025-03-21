@@ -1,11 +1,26 @@
 import { LinearGradient } from "expo-linear-gradient";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Dimensions, StyleSheet, Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import axios from "axios";
 
 const { width, height } = Dimensions.get("window");
 
-export default function Navbar({ uvIndex = 5 }: { uvIndex: number }) {
+export default function Navbar() {
+    const [uvIndex, setUvIndex] = useState<number | null>(null);
+
+    useEffect(() => {
+        const fetchUvIndex = async () => {
+            try {
+                const response = await axios.get("http://localhost:3000/uv-api/uv-index"); 
+                setUvIndex(response.data.uvIndex);
+            } catch (error) {
+                console.error("Error fetching UV index:", error);
+            }
+        };
+        fetchUvIndex();
+    }, []);
+
     const getUVGradient = (uv: number): [string, string, string] => {
         if (uv <= 1) return ["#4CAF50", "#66BB6A", "#81C784"];
         if (uv <= 3) return ["#FFEB3B", "#FFC107", "#FF9800"];
@@ -18,10 +33,14 @@ export default function Navbar({ uvIndex = 5 }: { uvIndex: number }) {
     return (
         <View style={styles.navbarContainer}>
             <Ionicons style={styles.icon} name="arrow-back" size={width * 0.1} color="white" />
-            <View style={styles.uvContainer}>
-                <LinearGradient colors={getUVGradient(uvIndex)} style={styles.uvIndicator} />
-                <Text style={styles.uvText}>UV {uvIndex}</Text>
-            </View>
+            {uvIndex !== null && (
+                <View style={styles.uvContainer}>
+                    <View style={styles.uvIndicator}>
+                        <LinearGradient colors={getUVGradient(uvIndex)} style={StyleSheet.absoluteFill} />
+                    </View>
+                    <Text style={styles.uvText}>UV {uvIndex}</Text>
+                </View>
+            )}
             <Ionicons style={styles.icon} name="camera" size={width * 0.1} color="white" />
             <Ionicons style={styles.icon} name="chatbubbles" size={width * 0.1} color="white" />
             <Ionicons style={styles.icon} name="person-circle-outline" size={width * 0.1} color="white" />
@@ -49,7 +68,7 @@ const styles = StyleSheet.create({
     },
     uvContainer: {
         alignItems: "center",
-        marginTop: height * 0.03
+        marginTop: height * 0.03,
     },
     uvIndicator: {
         width: width * 0.07,
@@ -58,6 +77,7 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: "white",
         marginBottom: 3,
+        overflow: "hidden",
     },
     uvText: {
         color: "white",

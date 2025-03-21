@@ -10,9 +10,9 @@ export default function TabLayout() {
     return (
         <View style={{flex: 1}}>
             {/*<AuthScreen/>*/}
-            {/*<UploadPhotoScreen />*/}
+            <UploadPhotoScreen />
             {/*<AnalyzeScreen />*/}
-            <AdminScreen />
+            {/* <AdminScreen /> */}
             {/*<ProfileScreen />*/}
         </View>
     );

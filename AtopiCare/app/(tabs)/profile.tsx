@@ -20,7 +20,7 @@ export default function ProfileScreen() {
 
   return (
       <LinearGradient colors={["#141E30", "#243B55"]} style={styles.container}>
-        <Navbar uvIndex={3} />
+        <Navbar />
 
         <ScrollView
             contentContainerStyle={styles.scrollContainer}

@@ -37,7 +37,7 @@ export default function UploadPhotoScreen() {
 
   return (
     <LinearGradient colors={["#0f0c29", "#302b63", "#24243e"]} style={styles.container}>
-      <Navbar uvIndex={5} />
+      <Navbar />
       <Text style={styles.title}>Upload Your Photo</Text>
 
       {selectedImage ? (
