@@ -15,14 +15,22 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import Navbar from "@/components/ui/Navbar";
 import FoodResult from "@/components/ui/FoodResult";
+import axios from "axios";
 
 const { width, height } = Dimensions.get("window");
+
+type foodResult = {
+    food: string,
+    stressLevel:  "low" | "medium" | "high",
+    riskPercentage: number
+}
 
 export default function FoodAndStressScreen() {
     const [foodInput, setFoodInput] = useState("");
     const [selectedStressLevel, setSelectedStressLevel] = useState<"low" | "medium" | "high" | null>(null);
-    const [result, setResult] = useState<{ food: string; stressLevel: "low" | "medium" | "high"; riskPercentage: number } | null>(null);
+    const [result, setResult] = useState<foodResult | null>(null);
     const [loading, setLoading] = useState(false);
+
 
     const handleSubmit = async () => {
         if (!foodInput || !selectedStressLevel) {
@@ -34,20 +42,26 @@ export default function FoodAndStressScreen() {
         setResult(null);
 
         try {
-            const response = await fetch("http://localhost:3000/food-result", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ food: foodInput, stressLevel: selectedStressLevel }),
-            });
-
-            const data = await response.json();
-
-            if (response.ok && typeof data.riskPercentage === "number") {
-                setResult({
-                    food: foodInput,
+            console.log(foodInput, selectedStressLevel);
+            const response = await axios.post(
+                "http://localhost:3000/food-advisor/analyze",
+                {
+                    meal: foodInput,
                     stressLevel: selectedStressLevel,
+                },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+
+            const data = response.data;
+
+            if (data.food && data.stressLevel && typeof data.riskPercentage === "number") {
+                setResult({
+                    food: data.food,
+                    stressLevel: data.stressLevel,
                     riskPercentage: data.riskPercentage,
                 });
 
@@ -56,7 +70,7 @@ export default function FoodAndStressScreen() {
             } else {
                 throw new Error("Unexpected response from server");
             }
-        } catch (error) {
+        } catch (error: any) {
             Alert.alert("Error", "Failed to check food safety.");
             console.error(error);
         } finally {
@@ -66,11 +80,8 @@ export default function FoodAndStressScreen() {
 
     return (
         <LinearGradient colors={["#0f0c29", "#302b63", "#24243e"]} style={styles.container}>
-            <Navbar uvIndex={4} />
-            <KeyboardAvoidingView
-                behavior={Platform.OS === "ios" ? "padding" : undefined}
-                style={{ flex: 1 }}
-            >
+            <Navbar />
+            <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} style={{ flex: 1 }}>
                 <ScrollView contentContainerStyle={styles.contentContainer}>
                     <Text style={styles.title}>TEST A FOOD</Text>
                     <TextInput
@@ -86,10 +97,7 @@ export default function FoodAndStressScreen() {
                         {["low", "medium", "high"].map(level => (
                             <TouchableOpacity
                                 key={level}
-                                style={[
-                                    styles.stressButton,
-                                    selectedStressLevel === level && styles.stressButtonSelected
-                                ]}
+                                style={[styles.stressButton, selectedStressLevel === level && styles.stressButtonSelected]}
                                 onPress={() => setSelectedStressLevel(level as any)}
                             >
                                 <Text style={styles.stressText}>{level.charAt(0).toUpperCase() + level.slice(1)}</Text>

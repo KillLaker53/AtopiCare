@@ -6,7 +6,8 @@ import AnalyzeScreen from "@/app/(tabs)/AnalyzeScreen";
 //
 import {Tabs} from "expo-router";
 import {IconSymbol} from "@/components/ui/IconSymbol";
-//
+import FoodAndStressScreen from "@/app/(tabs)/FoodAndStressScreen";
+
 // export default function TabLayout() {
 //     return (
 //         <Tabs>
@@ -26,17 +27,17 @@ import {IconSymbol} from "@/components/ui/IconSymbol";
 //             />
 //         </Tabs>
 // )}
-import AdminScreen from "@/app/(tabs)/AdminScreen";
-import ProfileScreen from "@/app/(tabs)/profile";
-import FoodAndStressScreen from "@/app/(tabs)/FoodAndStressScreen";
-
+// import AdminScreen from "@/app/(tabs)/AdminScreen";
+// import ProfileScreen from "@/app/(tabs)/profile";
+// import FoodAndStressScreen from "@/app/(tabs)/FoodAndStressScreen";
+//
 export default function TabLayout() {
     return (
         <View style={{flex: 1}}>
             {/*<AuthScreen/>*/}
-            <UploadPhotoScreen />
+            {/*<UploadPhotoScreen />*/}
             {/*<AnalyzeScreen />*/}
-            {/* <AdminScreen /> */}
+            {/* <AdminScreen />*/}
             {/*<ProfileScreen />*/}
             <FoodAndStressScreen />
         </View>

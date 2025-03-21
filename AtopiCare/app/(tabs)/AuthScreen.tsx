@@ -35,7 +35,16 @@ export default function AuthScreen() {
 
         const navigation = useNavigation<AuthScreenNavigationProp>();
 
+    const clearFields = async () => {
+        setEmail("");
+        setPassword("");
+        setFirstName("");
+        setLastName("");
+        setUsername("");
+    }
+
     const handleRegister = async () => {
+        await clearFields();
         if (!email || !password || !firstName || !lastName || !username) {
             Alert.alert("Error", "Please fill in all fields.");
             return;
@@ -55,13 +64,13 @@ export default function AuthScreen() {
             await AsyncStorage.setItem("accessToken", response.data.accessToken);
 
             setIsRegistering(false);
-
         } catch (error: any) {
             Alert.alert("Error", error.response?.data?.message || "Registration failed");
         }
     };
 
     const handleLogin = async () => {
+        await clearFields();
         if (!username || !password) {
             Alert.alert("Error", "Please fill in both fields.");
             return;
@@ -78,6 +87,11 @@ export default function AuthScreen() {
         } catch (error: any) {
             Alert.alert("Error", error.response?.data?.message || "Login failed");
         }
+    };
+
+    const handleFormSwitch = () => {
+        clearFields();
+        setIsRegistering(!isRegistering);
     };
 
     const styles = StyleSheet.create({
@@ -172,7 +186,7 @@ export default function AuthScreen() {
                 <>
                     <TextInput
                         style={styles.input}
-                        placeholder="First Name"
+                        placeholder="first name"
                         placeholderTextColor={isDarkTheme ? "white" : "black"}
                         value={firstName}
                         onChangeText={setFirstName}
@@ -181,7 +195,7 @@ export default function AuthScreen() {
                     />
                     <TextInput
                         style={styles.input}
-                        placeholder="Last Name"
+                        placeholder="last name"
                         placeholderTextColor={isDarkTheme ? "white" : "black"}
                         value={lastName}
                         onChangeText={setLastName}
@@ -190,7 +204,7 @@ export default function AuthScreen() {
                     />
                     <TextInput
                         style={styles.input}
-                        placeholder="Email"
+                        placeholder="email"
                         placeholderTextColor={isDarkTheme ? "white" : "black"}
                         value={email}
                         onChangeText={setEmail}
@@ -202,7 +216,7 @@ export default function AuthScreen() {
 
             <TextInput
                 style={styles.input}
-                placeholder="Username"
+                placeholder="username"
                 placeholderTextColor={isDarkTheme ? "white" : "black"}
                 value={username}
                 onChangeText={setUsername}
@@ -212,7 +226,7 @@ export default function AuthScreen() {
 
             <TextInput
                 style={styles.input}
-                placeholder="Password"
+                placeholder="password"
                 placeholderTextColor={isDarkTheme ? "white" : "black"}
                 value={password}
                 onChangeText={setPassword}
@@ -221,7 +235,7 @@ export default function AuthScreen() {
 
             <TouchableOpacity
                 style={styles.buttonPrimary}
-                onPress={isRegistering ? handleRegister : handleLogin}
+                onPress={handleFormSwitch}
             >
                 <Text style={styles.buttonText}>
                     {isRegistering ? "Sign Up" : "Sign In"}
@@ -230,7 +244,7 @@ export default function AuthScreen() {
 
             <TouchableOpacity
                 style={styles.buttonSecondary}
-                onPress={() => setIsRegistering(!isRegistering)}
+                onPress={handleFormSwitch}
             >
                 <Text style={styles.buttonTextSecondary}>
                     {isRegistering ? "Sign In" : "Sign Up"}

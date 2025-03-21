@@ -9,6 +9,7 @@ import { MongodbConnectionModule } from './mongodb_connection/mongodb_connection
 // import { ImageModule } from './image.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { UvApiModule } from './uv_api/uv_api.module';
+import { FoodAdvisorModule } from './food-advisor/food_advisor.module';
 
 @Module({
   imports: [
@@ -21,7 +22,8 @@ import { UvApiModule } from './uv_api/uv_api.module';
     // MulterModule.register({
     //   dest: './uploads',
     // }),
-    UvApiModule
+    UvApiModule,
+    FoodAdvisorModule,  // Add FoodAdvisorModule here
   ],
   controllers: [AppController],
   providers: [AppService],
