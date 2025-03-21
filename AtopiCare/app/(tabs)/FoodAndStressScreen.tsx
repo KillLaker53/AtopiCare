@@ -66,7 +66,7 @@ export default function FoodAndStressScreen() {
 
     return (
         <LinearGradient colors={["#0f0c29", "#302b63", "#24243e"]} style={styles.container}>
-            <Navbar uvIndex={4} />
+            <Navbar/>
             <KeyboardAvoidingView
                 behavior={Platform.OS === "ios" ? "padding" : undefined}
                 style={{ flex: 1 }}

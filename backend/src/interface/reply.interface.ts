@@ -1,4 +1,4 @@
-export interface IReply extends Document {
+export interface IReply{
   userId: number;
   content: string;
   date: string;
