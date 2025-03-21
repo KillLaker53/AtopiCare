@@ -7,6 +7,7 @@ export class ThreadSelectedDto {
   title: string;
   ownerUsername: string;
   date: string;
+  content: string
   replies: (ReplySelectedDto | null)[];
 
   constructor(thread: IThread, username: string) {
@@ -14,5 +15,6 @@ export class ThreadSelectedDto {
     this.title = thread.title;
     this.date = thread.date;
     this.ownerUsername = username;
+    this.content = thread.content;
   }
 }

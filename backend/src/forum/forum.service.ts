@@ -95,6 +95,8 @@ export class ForumService {
     const newThread = new this.threadModel(saveThread);
 
     await newThread.save();
+
+    return new ThreadSelectedDto(newThread, thread.ownerUsername);
   }
 
   async saveReply(reply: ReplyPostDto) {
@@ -119,18 +121,6 @@ export class ForumService {
       return null;
     }
 
-    // const newReply: ReplySaveDto = new ReplySaveDto(reply.content, replyUser.id);
-    // const newReply = new (thread.replies as any).constructor({
-    //   content: reply.content,
-    //   ownerUsername: reply.ownerUsername,
-    //   date: new Date().toLocaleString(),
-    // });
-    // console.log(newReply);
-    // console.log(reply);
-
-    // thread.replies.push(newReply);
-
-    // await thread.save();
     const newReply = {
       userId: replyUser.id,
       content: reply.content,
@@ -145,19 +135,13 @@ export class ForumService {
     thread.markModified('replies');
 
     await thread.save();
-    // const updatedThread = await this.threadModel.findOneAndUpdate(
-    //   { _id: reply.threadId },  // Find the thread by its ID
-    //   {
-    //     $push: {
-    //       replies: {
-    //         userId: replyUser.id,
-    //         content: reply.content,
-    //         ownerUsername: reply.ownerUsername,
-    //         date: new Date().toLocaleString(),
-    //       }
-    //     }
-    //   },
-    //   { new: true }  // This returns the updated document
-    // );
+
+    const returnedReply: ReplySelectedDto = {
+      ownerUsername: newReply.ownerUsername,
+      date: newReply.date,
+      content: newReply.content,
+    }
+
+    return returnedReply;
   }
 }

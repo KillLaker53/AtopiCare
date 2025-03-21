@@ -19,11 +19,11 @@ export class ForumController {
 
   @Post('/threads/add')
   saveThread(@Body() thread: ThreadPostDto) {
-    this.forumService.saveThread(thread);
+    return this.forumService.saveThread(thread);
   }
 
   @Post('/threads/reply/add')
   saveReply(@Body() reply: ReplyPostDto) {
-    this.forumService.saveReply(reply);
+    return this.forumService.saveReply(reply);
   }
 }
