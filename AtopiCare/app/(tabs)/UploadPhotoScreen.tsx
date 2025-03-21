@@ -4,14 +4,22 @@ import * as ImagePicker from "expo-image-picker";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import Navbar from "@/components/ui/Navbar";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { useNavigation } from "expo-router";
 
 const { width, height } = Dimensions.get("window");
+type RootStackParamList = {
+    AnalyzeScreen: undefined;
+};
+
+type AnalyzeScreenNavigationProp = StackNavigationProp<RootStackParamList, "AnalyzeScreen">;
 
 export default function UploadPhotoScreen() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const [classificationResult, setClassificationResult] = useState<{ class: string; confidence: number } | null>(null);
-
+  const navigation = useNavigation<AnalyzeScreenNavigationProp>();
+  
   const pickImageFromGallery = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -22,7 +30,7 @@ export default function UploadPhotoScreen() {
 
     if (!result.canceled) {
       setSelectedImage(result.assets[0].uri);
-      setClassificationResult(null); // Reset result when new image is selected
+      setClassificationResult(null); 
     }
   };
 
@@ -55,12 +63,11 @@ export default function UploadPhotoScreen() {
       let formData = new FormData();
 
       if (Platform.OS === "web") {
-        // Web: Convert URI to Blob
+        
         const response = await fetch(selectedImage);
         const blob = await response.blob();
         formData.append("file", new File([blob], `photo-${Date.now()}.jpg`, { type: "image/jpeg" }));
       } else {
-        // Mobile (iOS & Android)
         formData.append("file", {
           uri: selectedImage,
           name: `photo-${Date.now()}.jpg`,
@@ -70,26 +77,24 @@ export default function UploadPhotoScreen() {
 
       console.log("Sending Image to Backend:", formData);
 
-      const response = await fetch("http://10.0.2.2:3000/image/upload", {
+      const response = await fetch("http://localhost:3000/image/upload", {
         method: "POST",
         body: formData,
         headers: {
-          ...(Platform.OS === "web" ? {} : { "Content-Type": "multipart/form-data" }), // Remove Content-Type for Web
+          ...(Platform.OS === "web" ? {} : { "Content-Type": "multipart/form-data" }), 
         },
       });
 
-      console.log("📥 Response Status:", response.status);
 
       const result = await response.json();
 
-      //Log the SageMaker Response
-      console.log("📊 SageMaker Response:", result);
 
       if (response.ok) {
         setClassificationResult({
           class: result.classification?.classification || "Unknown",
           confidence: result.classification?.confidence || 0,
         });
+        navigation.navigate("AnalyzeScreen")
       } else {
         Alert.alert("Error", result.error || "Failed to analyze image.");
       }
@@ -100,6 +105,7 @@ export default function UploadPhotoScreen() {
       setUploading(false);
     }
   };
+  
 
   return (
     <LinearGradient colors={["#0f0c29", "#302b63", "#24243e"]} style={styles.container}>
@@ -133,13 +139,6 @@ export default function UploadPhotoScreen() {
         </LinearGradient>
       </TouchableOpacity>
 
-      {/*Display the classification result */}
-      {classificationResult && (
-        <View style={styles.resultContainer}>
-          <Text style={styles.resultText}>🧪 Classification: {classificationResult.class}</Text>
-          <Text style={styles.resultText}>📊 Confidence: {(classificationResult.confidence * 100).toFixed(2)}%</Text>
-        </View>
-      )}
     </LinearGradient>
   );
 }

@@ -46,7 +46,7 @@ export class AuthenticationService {
     const user = await this.usersService.findUserByName(input.username);
     if (user) {
       const isMatched: boolean = await bcrypt.compare(input.password, user.password);
-      console.log(isMatched);
+      
       if(isMatched){
         return {
           userId: user.id,
