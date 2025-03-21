@@ -10,6 +10,8 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
 import { extname } from "path";
 import { classificationDescriptions } from "./constants/classification-descriptions"; 
+import { ImageService } from "./image.service";
+import { AnalysisService } from "./analysis.service";
 
 @Controller("image")
 export class ImageController {
