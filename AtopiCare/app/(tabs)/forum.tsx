@@ -235,7 +235,7 @@ type Thread = {
 //     const formData = new FormData();
 //     formData.append('file', `data:image/jpeg;base64,${base64}`);
 //
-//     await axios.post('http://10.0.2.2:3000/upload', formData, {
+//     await axios.post('http://localhost:3000/upload', formData, {
 //         headers: {'Content-Type': 'multipart/form-data'}
 //     });
 // }
@@ -264,10 +264,12 @@ export default function forum () {
 
             const ownerUsername = JSON.parse(decodedToken).username
 
+            console.log(decodedToken, ownerUsername);
+
             setOwnerUsername(ownerUsername);
         });
 
-        axios.get('http://10.0.2.2:3000/forum/threads').then(
+        axios.get('http://localhost:3000/forum/threads').then(
             response => {
                 setThreads(response.data);
             }
@@ -285,7 +287,7 @@ export default function forum () {
 
         //await uploadImageToS3(images[0]);
 
-        axios.post("http://10.0.2.2:3000/forum/threads/add", newThread).then((response) => {
+        axios.post("http://localhost:3000/forum/threads/add", newThread).then((response) => {
             const returnedThread: Thread = {
                 id: response.data.id,
                 title: response.data.title,
@@ -309,7 +311,7 @@ export default function forum () {
             };
             console.log(newReply);
 
-            axios.post("http://10.0.2.2:3000/forum/threads/reply/add", newReply).then(response => {
+            axios.post("http://localhost:3000/forum/threads/reply/add", newReply).then(response => {
                 const updatedThreads = threads.map(thread => {
                     console.log(response.data);
                     if (thread.id === selectedThread.id) {
@@ -399,7 +401,7 @@ export default function forum () {
                     visible={!!selectedThread}
                     onRequestClose={() => setSelectedThread(null)}
                     onShow={() => {
-                axios.get(`http://10.0.2.2:3000/forum/threads/${selectedThread.id}`).then(
+                axios.get(`http://localhost:3000/forum/threads/${selectedThread.id}`).then(
                             response => setSelectedThread(response.data)
                         )
                     }}
