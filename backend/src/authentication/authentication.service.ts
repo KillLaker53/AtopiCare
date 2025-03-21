@@ -23,8 +23,9 @@ export class AuthenticationService {
     }
     return this.signIn(user);
   }
+
   async register(input: RegisterInput): Promise<AuthResult> {
-    console.log(input.username);
+   
     const user = await this.usersService.findUserByName(input.username);
     if(user){
       throw new ConflictException("User already exists");
@@ -43,12 +44,18 @@ export class AuthenticationService {
   
   async validateUser(input: AuthInput): Promise<SignInData | null> {
     const user = await this.usersService.findUserByName(input.username);
-    const hashedPassword = await this.hashPassword(input.password);
-    if (user && user.password === hashedPassword) {
-      return {
-        userId: user.id,
-        username: user.username,
-      };
+    if (user) {
+      const isMatched: boolean = await bcrypt.compare(input.password, user.password);
+      console.log(isMatched);
+      if(isMatched){
+        return {
+          userId: user.id,
+          username: user.username,
+        };
+      } else{
+        throw new Error("Wrong password");
+      }
+      
     }
     return null;
   }
@@ -65,7 +72,7 @@ export class AuthenticationService {
   }
   
   async hashPassword(password: string): Promise<string> {
-    const saltRounds = 10;
-    return await bcrypt.hash(password, saltRounds);
+    
+    return await bcrypt.hash(password, 10);
   }
 }
