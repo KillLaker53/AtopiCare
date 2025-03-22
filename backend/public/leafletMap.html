@@ -28,7 +28,19 @@
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
-        var heatLayer = L.heatLayer([], { radius: 25 }).addTo(map);
+        var heatLayer = L.heatLayer([], {
+            radius: 20,
+            blur: 15,
+            maxZoom: 17,
+            gradient: {
+                0.0: '#4CAF50', // Low
+                0.2: '#66BB6A', // Low
+                0.4: '#FFEB3B', // Moderate
+                0.6: '#FFC107', // Moderate
+                0.8: '#FF9800', // High
+                1.0: '#F44336'  // High
+            }
+        }).addTo(map);
 
         function updateHeatmap(data) {
             var heatPoints = data.map(d => [d.lat, d.lon, d.uvIndex]);
