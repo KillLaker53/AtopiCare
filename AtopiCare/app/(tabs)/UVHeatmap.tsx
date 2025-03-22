@@ -15,25 +15,19 @@ export default function LeafletMap(){
     }, [heatmapData]);
 
     const fetchUVData = async () => {
-        try {
-            const response = await axios.get("http://10.0.2.2:3000/uv-api/uv-index");
-            const data = response.data;
+    try {
+        const response = await axios.get("http://10.0.2.2:3000/uv-api/uv-index");
+        const data = response.data;
 
-            const formattedData = data.map((item: { lat: number; lon: number; uvIndex: number }) => ({
-                lat: item.lat,
-                lon: item.lon,
-                uvIndex: item.uvIndex
-            }));
+        setHeatmapData(data);
 
-            setHeatmapData(formattedData);
-
-            if (webViewRef.current) {
-                (webViewRef.current as WebView).postMessage(JSON.stringify(formattedData));
-            }
-        } catch (error) {
-            console.error("Error fetching UV data:", error);
+        if (webViewRef.current) {
+            (webViewRef.current as WebView).postMessage(JSON.stringify(data));
         }
-    };
+    } catch (error) {
+        console.error("Error fetching UV data:", error);
+    }
+};
 
     return (
       <View style={styles.container}>

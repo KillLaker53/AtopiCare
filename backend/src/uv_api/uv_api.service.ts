@@ -8,14 +8,18 @@ export class UvApiService {
     private readonly lat = UV_API_CONFIG.LAT;
     private readonly lon = UV_API_CONFIG.LON;
 
-    async uvIndex(): Promise<number> {
-        const url = `${this.apiUrl}?lat=${this.lat}&lon=${this.lon}&appid=${this.apiKey}`
+    async uvIndex(): Promise<{ lat: number, lon: number, uvIndex: number }[]> {
+    const url = `${this.apiUrl}?lat=${this.lat}&lon=${this.lon}&appid=${this.apiKey}`;
 
-        try{
-            const response = await axios.get(url);
-            return response.data.value;
-        }catch(err){
-            throw new Error("Failed to fetch uv index");
-        }
+    try {
+        const response = await axios.get(url);
+        return [{
+            lat: this.lat,
+            lon: this.lon,
+            uvIndex: response.data.value
+        }];
+    } catch (err) {
+        throw new Error("Failed to fetch uv index");
     }
+}
 }
