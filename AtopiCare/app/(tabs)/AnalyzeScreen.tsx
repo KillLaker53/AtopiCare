@@ -14,7 +14,7 @@ export default function AnalyzeScreen() {
   useEffect(() => {
     const fetchAll = async () => {
       try {
-        const response = await fetch("http://localhost:3000/image/user/1");
+        const response = await fetch("http://10.0.2.2:3000/image/user/1");
         const data = await response.json();
         setAnalyses(data);
         setSelected(data[0]);
@@ -33,7 +33,7 @@ export default function AnalyzeScreen() {
       style={[styles.card, selected?.id === item.id && styles.cardSelected]}
       onPress={() => setSelected(item)}
     >
-      <Image source={{ uri: `http://localhost:3000${item.imageUrl}` }} style={styles.thumb} />
+      <Image source={{ uri: `http://10.0.2.2:3000${item.imageUrl}` }} style={styles.thumb} />
       <View style={styles.cardText}>
         <Text style={styles.dateText}>{new Date(item.createdAt).toLocaleDateString()}</Text>
         <Text style={styles.statusTextSmall}>{item.classification}</Text>
